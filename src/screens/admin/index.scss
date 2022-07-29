@@ -1,0 +1,83 @@
+.ant-layout {
+  min-height: 100vh !important;
+}
+.menu-layout {
+  min-height: 100vh;
+}
+.trigger {
+  padding: 0 24px;
+  font-size: 18px;
+  line-height: 64px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.trigger {
+  color: #fff !important;
+}
+.trigger:hover {
+  color: #1890ff;
+}
+.logo {
+  position: relative;
+  height: 84px;
+  // background: #eee;
+  padding: 10;
+  margin: 10px;
+  img {
+    max-width: 100%;
+    object-fit: contain;
+  }
+}
+
+.site-layout {
+  background: #fff;
+}
+.ant-layout-sider-children {
+}
+.site-layout-background {
+  background: rgba(0, 36, 78, 0.2);
+  min-height: 280;
+  border: 1px solid #eee;
+  padding: 10px;
+}
+
+.header {
+  background-color: #fff;
+  padding: 0 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  .right {
+    display: flex;
+    align-items: center;
+    margin-right: 30px;
+    .mr15 {
+      margin-right: 15px;
+    }
+  }
+}
+.button_mail {
+  position: fixed;
+  bottom: 3%;
+  right: 2%;
+}
+.card-user {
+  align-items: center;
+}
+.pull-right {
+  margin-top: 15px;
+}
+.update-customer {
+  .ant-form-item-control-input-content {
+    display: flex !important;
+    align-items: center;
+  }
+  .ant-upload-list {
+    display: none !important;
+  }
+}
+.box-form {
+  .ant-form-item {
+    margin: 10px 0;
+  }
+}
