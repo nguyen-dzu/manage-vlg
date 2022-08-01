@@ -15,9 +15,7 @@ export default function HeaderProFile() {
   const info = useAppSelector((state) => state.auth.info);
   const getProFile = {
     name: info ? info.fullName : "Admin",
-    avatar: info.avatar
-      ? info.avatar
-      : <Avatar icon={<UserOutlined />} /> 
+    avatar: <Avatar icon={<UserOutlined />} /> 
   };
   
   useEffect(() => {
@@ -29,6 +27,7 @@ export default function HeaderProFile() {
 
   const logout = () => {
     dispatch(actions.authActions.logout());
+    localStorage.clear();
   };
   // const routerProfile = () => {
   //   history.replace("/admin/profile");

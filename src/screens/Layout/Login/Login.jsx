@@ -20,7 +20,7 @@ function Login() {
    useEffect(() => {
     const checkToken = async () => {
       if (token) {
-        navigation('/admin')
+        navigation('/home')
       } else {
         navigation('/')
         openNotification();
@@ -63,10 +63,15 @@ function Login() {
         // dispatch(loginSuccess(token));
         setTimeout(() => {
           setLoading(false);
-          navigation('/admin')
-          message.success("Đăng nhập thành công");
+          navigation('/home')
+          notification.success({
+            message: 'Đăng nhập thành công'
+          })
         }, 1000);
       } catch (error) {
+        notification.error({
+          message: 'Đăng nhập không thành công vui lòng kiểm tra lại tài khoản hoặc mật khẩu'
+        })
         setTimeout(() => {
           setLoading(false);
         }, 1000);

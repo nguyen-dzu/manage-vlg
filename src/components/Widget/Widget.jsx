@@ -2,7 +2,7 @@ import React from "react";
 import { UpOutlined,UserOutlined,WalletOutlined ,DollarCircleOutlined,ShoppingCartOutlined} from "@ant-design/icons";
 import './widget.scss';
 
-export default function Widget(type) {
+const Widget = ({ type }) => {
   let data;
 
   //temporary
@@ -32,7 +32,7 @@ export default function Widget(type) {
         isMoney: false,
         link: "View all orders",
         icon: (
-          <ShoppingCartOutlined 
+          <ShoppingCartOutlined
             className="icon"
             style={{
               backgroundColor: "rgba(218, 165, 32, 0.2)",
@@ -61,7 +61,7 @@ export default function Widget(type) {
         isMoney: true,
         link: "See details",
         icon: (
-          <WalletOutlined 
+          <WalletOutlined
             className="icon"
             style={{
               backgroundColor: "rgba(128, 0, 128, 0.2)",
@@ -74,6 +74,7 @@ export default function Widget(type) {
     default:
       break;
   }
+
   return (
     <div className="widget">
       <div className="left">
@@ -92,4 +93,6 @@ export default function Widget(type) {
       </div>
     </div>
   );
-}
+};
+
+export default Widget;

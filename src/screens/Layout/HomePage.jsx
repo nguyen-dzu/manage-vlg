@@ -82,13 +82,11 @@ export default function HomePage() {
           <Widget type="balance" />
         </div>
         <div className="charts">
-          <Featured />
+          {/* <Featured /> */}
           <Chart title="Last 6 Months (Revenue)" aspect={2 / 1} />
-        </div>
-        <div className="listContainer">
-          <h1 className="liiditle">Thành Viên Trong Nhóm</h1>
           <Table dataSource={DataSource} columns={Column}/>
         </div>
+       
       </div>
      
     </Layout>
