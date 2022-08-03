@@ -24,18 +24,22 @@ import MyPagination from "../../../../components/Pagination";
 import errorHandler from "../../../../request/errorHandel";
 import uniqueId from "../../../../utils/uinqueId";
 import ActionAdmin from "./Action";
+import Search from "antd/lib/input/Search";
+import Highlighter from "react-highlight-words";
 
 export default function Admin() {
   const [toDoList, setTodoList] = useState([]);
   const [postList, setPostList] = useState({
     pageSize: 10,
     current: 1,
+    SearchContent: ''
   });
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState({});
   const roleId = "c812fa78-de2f-11ec-8bb8-448a5b2c2d83";
   const [loadingAdmin, setLoadingAdmin] = useState(false);
   const [addAdmin, setAddAdmin] = useState(false);
+  const [value, setValue] = useState([])
   useEffect(() => {
     const fetchUserAdmin = async () => {
       try {
@@ -64,9 +68,7 @@ export default function Admin() {
         setTimeout(() => {
           setLoading(false);
         });
-        setPagination({
-          totalDocs: data.data.pageInfo.totalPages,
-        });
+        setPagination(data.data.pageInfo);
       } catch (error) {
         errorHandler(error);
       }
@@ -107,6 +109,15 @@ export default function Admin() {
       title: "Họ Và Tên",
       dataIndex: "fullName",
       key: "fullName",
+      render: (fullName) => (
+        <Highlighter
+          highlightClassName="YourHighlightClass"
+          highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
+          autoEscape={true}
+          searchWords={value}
+          textToHighlight={fullName}
+        />
+      ),
     },
 
     {
@@ -127,8 +138,8 @@ export default function Admin() {
               }
               onConfirm={() => confirmStatus(status, item.id, item.stt)}
               onCancel={cancel}
-              okText="Yes"
-              cancelText="No"
+              okText="Đồng Ý"
+              cancelText="Hủy"
               placement="left"
             >
               <Button
@@ -155,7 +166,7 @@ export default function Admin() {
     };
     const updateStatus = async () => {
       const data = await apiService.activeUser(obj);
-      if (!data.data.isActive) {
+      if (data.data.isActive == status) {
         notification.error({
           message: !data.data.isActive
             ? "Khóa không thành công"
@@ -185,6 +196,23 @@ export default function Admin() {
     };
     updateStatus();
   }
+
+  const onSearch = (value) => {
+    setValue([value]);
+    const filteredEvents = toDoList.filter(({ fullName }) => {
+      fullName = fullName.toLowerCase();
+      return fullName.includes(value);
+    });
+    setTodoList(filteredEvents);
+    setPostList({
+      SearchContent: value ? value :'',
+      pageSize: 10,
+      current: pagination.current,
+    });
+    setTimeout((
+      setLoading(true)
+    ), 3000)
+  };
   function cancel(e) {
     message.error("Click on No");
   }
@@ -193,16 +221,28 @@ export default function Admin() {
       <PageHeader
         title="Quản lý Admin"
         ghost={false}
-        extra={[
-          <Button
-            type="success"
-            onClick={() => setAddAdmin(true)}
-            key={`${uniqueId()}`}
-          >
-            Thêm Admin
-          </Button>,
-        ]}
       />
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          margin: 15,
+          marginBottom: 0,
+        }}
+      >
+        <Search
+          style={{ width: 350 }}
+          placeholder="Tìm Kiếm ... "
+          onSearch={onSearch}
+        />
+        <Button
+          type="success"
+          onClick={() => setAddAdmin(true)}
+          key={`${uniqueId()}`}
+        >
+          Thêm Admin
+        </Button>
+      </div>
       <Table
         style={{
           margin: "10px",

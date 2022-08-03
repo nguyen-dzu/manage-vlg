@@ -25,15 +25,25 @@ import moment from "moment";
 import apiService from "../../../../api/apiService";
 import MyPagination from "../../../../components/Pagination";
 import errorHandler from "../../../../request/errorHandel";
+import Highlighter from "react-highlight-words";
+import Search from "antd/lib/input/Search";
+import { useNavigate } from "react-router";
+import uniqueId from "../../../../utils/uinqueId";
+import { actions } from "../../../../redux";
+import { useAppDispatch } from "../../../../hook/useRedux";
 
 export default function Restaurant() {
   const [toDoList, setTodoList] = useState([]);
   const [postList, setPostList] = useState({
     pageSize: 10,
     current: 1,
+    SearchContent: "",
   });
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState({});
+  const [value, setValue] = useState([]);
   useEffect(() => {
     const fetchRestaurant = async () => {
       try {
@@ -60,9 +70,7 @@ export default function Restaurant() {
         setTimeout(() => {
           setLoading(false);
         });
-        setPagination({
-          totalDocs: data.data.pageInfo.totalPages,
-        });
+        setPagination(data.data.pageInfo);
       } catch (error) {
         errorHandler(error);
       }
@@ -82,6 +90,15 @@ export default function Restaurant() {
       title: "Tên Quán",
       dataIndex: "name",
       key: "name",
+      render: (name) => (
+        <Highlighter
+          highlightClassName="YourHighlightClass"
+          highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
+          autoEscape={true}
+          searchWords={value}
+          textToHighlight={name}
+        />
+      ),
     },
     {
       title: "Địa Chỉ",
@@ -98,7 +115,7 @@ export default function Restaurant() {
         );
       },
     },
-    
+
     {
       title: "Khu Vực",
       dataIndex: "addressType",
@@ -148,9 +165,48 @@ export default function Restaurant() {
       },
     },
   ];
+
+  const onSearch = (value) => {
+    setValue([value]);
+    const filteredEvents = toDoList.filter(({ fullName }) => {
+      fullName = fullName.toLowerCase();
+      return fullName.includes(value);
+    });
+    setTodoList(filteredEvents);
+    setPostList({
+      SearchContent: value ? value : "",
+      pageSize: 10,
+      current: pagination.current,
+    });
+    setTimeout(setLoading(true), 3000);
+  };
   return (
     <Layout>
       <PageHeader title="Quản lý Quán Ăn" ghost={false} />
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          margin: 15,
+          marginBottom: 0,
+        }}
+      >
+        <Search
+          style={{ width: 350 }}
+          placeholder="Tìm Kiếm ... "
+          onSearch={onSearch}
+        />
+        <Button
+          type="success"
+          onClick={() => {
+            navigate("/approveRestaurant");
+            dispatch(actions.formActions.setNameMenu("Duyệt Quán Ăn"));
+          }}
+          key={`${uniqueId()}`}
+        >
+          Duyệt Shipper
+        </Button>
+      </div>
       <Table
         style={{
           margin: "10px",

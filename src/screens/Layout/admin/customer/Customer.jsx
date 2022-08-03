@@ -24,17 +24,21 @@ import MyPagination from "../../../../components/Pagination";
 import errorHandler from "../../../../request/errorHandel";
 import uniqueId from "../../../../utils/uinqueId";
 import ActionCustomer from "./Action";
+import Search from "antd/lib/input/Search";
+import Highlighter from "react-highlight-words";
 export default function Customer() {
   const [toDoList, setTodoList] = useState([]);
   const [postList, setPostList] = useState({
     pageSize: 10,
     current: 1,
+    SearchContent: ''
   });
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState({});
   const roleId = "c812fa79-de2f-11ec-8bb8-448a5b2c2d80";
   const [loadingCustomer, setLoadingCustomer] = useState(false);
   const [addCustomer, setAddCustomer] = useState(false);
+  const [value, setValue] = useState([])
   useEffect(() => {
     const fetchCustomer = async () => {
       try {
@@ -63,15 +67,13 @@ export default function Customer() {
         setTimeout(() => {
           setLoading(false);
         });
-        setPagination({
-          totalDocs: data.data.pageInfo.totalPages,
-        });
+        setPagination(data.data.pageInfo);
       } catch (error) {
         errorHandler(error);
       }
     };
     fetchCustomer();
-  }, [loadingCustomer, addCustomer,postList]);
+  }, [loadingCustomer, addCustomer, postList]);
 
   const columns = [
     {
@@ -101,13 +103,24 @@ export default function Customer() {
       title: "Email",
       dataIndex: "emailAddress",
       key: "emailAddress",
+      
     },
+    
     {
       title: "Họ Và Tên",
       dataIndex: "fullName",
       key: "fullName",
+      render: (fullName) => (
+        <Highlighter
+          highlightClassName="YourHighlightClass"
+          highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
+          autoEscape={true}
+          searchWords={value}
+          textToHighlight={fullName}
+        />
+      ),
     },
-   
+
     {
       title: "Số Điện Thoại",
       dataIndex: "phoneNumber",
@@ -126,8 +139,8 @@ export default function Customer() {
               }
               onConfirm={() => confirmStatus(status, item.id, item.stt)}
               onCancel={cancel}
-              okText="Yes"
-              cancelText="No"
+              okText="Đồng ý"
+              cancelText="Hủy"
               placement="left"
             >
               <Button
@@ -150,24 +163,25 @@ export default function Customer() {
   function confirmStatus(status, id, index) {
     const obj = {
       userId: id,
-      isActive: !status
-    }
+      isActive: !status,
+    };
     const updateStatus = async () => {
       const data = await apiService.activeUser(obj);
-      if(!data.data.isActive){
+      if (data.data.isActive == status) {
         notification.error({
-          message: status ? 'Khóa không thành công' : 'Kích hoạt không thành công'
-        })
-      }else{
-        if(!status){
+          message: status
+            ? "Khóa không thành công"
+            : "Kích hoạt không thành công",
+        });
+      } else {
+        if (!status) {
           notification.success({
-            message: 'kích hoạt thành công'
-          })
-        }
-        if(status) {
+            message: "kích hoạt thành công",
+          });
+        } else {
           notification.success({
-            message: 'khóa thành công'
-          })
+            message: "khóa thành công",
+          });
         }
         const tamp = [...toDoList];
         tamp[index - 1] = { ...tamp[index - 1], isActive: !status };
@@ -182,25 +196,49 @@ export default function Customer() {
     };
     updateStatus();
   }
-
+  const onSearch = (value) => {
+    setValue([value]);
+    const filteredEvents = toDoList.filter(({ fullName }) => {
+      fullName = fullName.toLowerCase();
+      return fullName.includes(value);
+    });
+    setTodoList(filteredEvents);
+    setPostList({
+      SearchContent: value ? value :'',
+      pageSize: 10,
+      current: pagination.current,
+    });
+    setTimeout((
+      setLoading(true)
+    ), 3000)
+  };
   function cancel(e) {
     message.error("Click on No");
   }
   return (
     <Layout>
-      <PageHeader
-        title="Quản lý Khách Hàng"
-        ghost={false}
-        extra={[
-          <Button
-            type="success"
-              onClick={() => setAddCustomer(true)}
-            key={`${uniqueId()}`}
-          >
-            Thêm Khách Hàng
-          </Button>,
-        ]}
-      />
+      <PageHeader title="Quản lý Khách Hàng" ghost={false} />
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          margin: 15,
+          marginBottom: 0,
+        }}
+      >
+        <Search
+          style={{ width: 350 }}
+          placeholder="Tìm Kiếm ... "
+          onSearch={onSearch}
+        />
+        <Button
+          type="success"
+          onClick={() => setAddCustomer(true)}
+          key={`${uniqueId()}`}
+        >
+          Thêm Khách Hàng
+        </Button>
+      </div>
       <Table
         style={{
           margin: "10px",
@@ -222,11 +260,11 @@ export default function Customer() {
           />
         </Divider>
       }
-      <ActionCustomer 
+      <ActionCustomer
         addCustomer={addCustomer}
-        setAddCustomer= {setAddCustomer}
+        setAddCustomer={setAddCustomer}
         loadingCustomer={loadingCustomer}
-        setLoadingCustomer={setLoadingCustomer} 
+        setLoadingCustomer={setLoadingCustomer}
       />
     </Layout>
   );

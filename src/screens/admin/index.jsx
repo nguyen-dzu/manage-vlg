@@ -1,4 +1,4 @@
-import { Button, Layout, Menu, Switch } from "antd";
+import { Button, Layout, Menu, message, Switch } from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
@@ -51,7 +51,7 @@ export default function SiderDemo({ items, headerItem = null }) {
         const reponse = await authService.getInfo();
         const { data } = reponse;
         setRole(data.roleId);
-        dispatch(actions.authActions.setInfo(data.data));
+        dispatch(actions.authActions.setInfo(data));
       } catch (error) {
         if (error.response.status === 401) {
           dispatch(actions.authActions.logout());
@@ -91,7 +91,7 @@ export default function SiderDemo({ items, headerItem = null }) {
           >
             Trang Chủ
           </Menu.Item>
-
+          {role == "c812fa78-de2f-11ec-8bb8-448a5b2c2d83" ? (
             <>
               <Menu.Item
                 key="2"
@@ -123,7 +123,7 @@ export default function SiderDemo({ items, headerItem = null }) {
                   icon={<UserOutlined />}
                   onClick={() => {
                     navigate("/shipper");
-                    dispatch(actions.formActions.setNameMenu("Khách Hàng"));
+                    dispatch(actions.formActions.setNameMenu("Shipper"));
                   }}
                 >
                   Shipper
@@ -133,7 +133,7 @@ export default function SiderDemo({ items, headerItem = null }) {
                   icon={<UserOutlined />}
                   onClick={() => {
                     navigate("/admin");
-                    dispatch(actions.formActions.setNameMenu("admin"));
+                    dispatch(actions.formActions.setNameMenu("Admin"));
                   }}
                 >
                   Admin
@@ -180,18 +180,16 @@ export default function SiderDemo({ items, headerItem = null }) {
                 >
                   Quán Ăn
                 </Menu.Item>
-                <Menu.Item
-                  key="Chuquan"
-                  icon={<SolutionOutlined />}
-                  onClick={() => {
-                    navigate("/UserRestaurant");
-                    dispatch(actions.formActions.setNameMenu("Chủ Quán Ăn"));
-                  }}
-                >
-                  Chủ Quán Ăn
-                </Menu.Item>
               </SubMenu>
             </>
+          ) : role == "c812fa79-de2f-11ec-8bb8-448a5b3c2d80" ? (
+            ""
+          ) : role == "c812fa79-de2f-11ec-8bb8-448a5b2c2d80" ||
+            role == "c812fa78-de2f-11ec-8bb8-448a5b2c2d80" ? (
+            (dispatch(actions.authActions.logout()), localStorage.clear()), message.error('Bạn Không Có Quyền Đăng Nhập')
+          ) : (
+            ""
+          )}
         </Menu>
       </Sider>
 

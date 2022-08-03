@@ -12,23 +12,23 @@ export const API_CONFIG = {
   USER_CUSTOMER : {
     ACTIVE: `/Users/Active`,
     CREATE_CUSTOMER: `/Users`,
-    GET_CUSTOMER:(postList, roleId) =>  `/Users?RoleId=${roleId}&PageSize=${postList.pageSize}&Current=${postList.current}`,
+    GET_CUSTOMER:(postList, roleId) =>  `/Users?RoleId=${roleId}&PageSize=${postList.pageSize}&Current=${postList.current}&SearchContent=${postList.SearchContent}`,
     GER_FOR_ID:(id)=> `/Users/${id}`,
   },
   RESTAURANT: {
-    GET_ALL:(postList) => `Restaurants?PageSize=${postList.pageSize}&Current=${postList.current}`,
+    GET_ALL:(postList) => `Restaurants?PageSize=${postList.pageSize}&Current=${postList.current}&SearchContent=${postList.SearchContent}`,
     CREATE_RESTAURNT:`/Restaurants`,  
     GER_FOR_ID:(id)=> `/Restaurants/${id}`,
     UPDATE_RESTAURANT:(id) => `/Restaurants/${id}`,
     DELETE_RESTAURANT: (id) => `/Restaurants/${id}`
   },
   SHIPPER : {
-    GET_SHIPPER:(postList, roleId) =>  `/Users?RoleId=${roleId}&PageSize=${postList.pageSize}&Current=${postList.current}`,
+    GET_SHIPPER:(postList, roleId) =>  `/Users?RoleId=${roleId}&PageSize=${postList.pageSize}&Current=${postList.current}&SearchContent=${postList.SearchContent}`,
   },
   APPROVE: {
-    GET_RESTAURANT:(postList) =>  `/RegisterRestaurants?PageSize=${postList.pageSize}&Current=${postList.current}`,
+    GET_RESTAURANT:(postList) =>  `/RegisterRestaurants?PageSize=${postList.pageSize}&Current=${postList.current}&SearchContent=${postList.SearchContent}`,
     APPROVE_RESTAURANT: (id) => `/RegisterRestaurants/${id}/Approve`,
-    GET_SHIPPER:(postList) => `/RegisterShippers?PageSize=${postList.pageSize}&Current=${postList.current}`,
+    GET_SHIPPER:(postList) => `/RegisterShippers?PageSize=${postList.pageSize}&Current=${postList.current}&SearchContent=${postList.SearchContent}`,
     APPROVE_SHIPPER: (id) => `/RegisterShippers/${id}/Approve`,
   }
 };

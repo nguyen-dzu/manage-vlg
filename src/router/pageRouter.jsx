@@ -9,7 +9,6 @@ import { Navigate } from "react-router-dom";
 import Customer from "../screens/Layout/admin/customer/Customer";
 import Restaurant from "../screens/Layout/admin/restaurant/Restaurant";
 import Shipper from "../screens/Layout/admin/Shipper/Shipper";
-import UserRestaurant from "../screens/Layout/admin/restaurant/UserRestaurant";
 import Admin from "../screens/Layout/admin/admin/Admin";
 import ApproveRestaurant from "../screens/Layout/admin/Approve/Restaurant";
 import ApproveShiper from "../screens/Layout/admin/Approve/Shipper";
@@ -39,11 +38,6 @@ export const routes = [
     path: "/shipper",
     headerItem: null,
     element: <Shipper />,
-  },
-  {
-    path: "/UserRestaurant",
-    headerItem: null,
-    element: <UserRestaurant />,
   },
   {
     path: "/admin",

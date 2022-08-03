@@ -24,15 +24,19 @@ import moment from "moment";
 import apiService from "../../../../api/apiService";
 import MyPagination from "../../../../components/Pagination";
 import errorHandler from "../../../../request/errorHandel";
+import Search from "antd/lib/input/Search";
+import Highlighter from "react-highlight-words";
 
 export default function ApproveRestaurant() {
   const [toDoList, setTodoList] = useState([]);
   const [postList, setPostList] = useState({
     pageSize: 10,
     current: 1,
+    SearchContent: ''
   });
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState({});
+  const [value, setValue] = useState([])
   useEffect(() => {
     const fetchUserApproveRestaurant = async () => {
       try {
@@ -61,9 +65,7 @@ export default function ApproveRestaurant() {
         setTimeout(() => {
           setLoading(false);
         });
-        setPagination({
-          totalDocs: data.data.pageInfo.totalPages,
-        });
+        setPagination(data.data.pageInfo);
       } catch (error) {
         errorHandler(error);
       }
@@ -116,6 +118,15 @@ export default function ApproveRestaurant() {
       title: "Tên Chủ Quán",
       dataIndex: "fullName",
       key: "fullName",
+      render: (fullName) => (
+        <Highlighter
+          highlightClassName="YourHighlightClass"
+          highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
+          autoEscape={true}
+          searchWords={value}
+          textToHighlight={fullName}
+        />
+      ),
     },
     {
       title: "Số Điện Thoại",
@@ -149,6 +160,22 @@ export default function ApproveRestaurant() {
       },
     },
   ];
+  const onSearch = (value) => {
+    setValue([value]);
+    const filteredEvents = toDoList.filter(({ fullName }) => {
+      fullName = fullName.toLowerCase();
+      return fullName.includes(value);
+    });
+    setTodoList(filteredEvents);
+    setPostList({
+      SearchContent: value ? value :'',
+      pageSize: 10,
+      current: pagination.current,
+    });
+    setTimeout((
+      setLoading(true)
+    ), 3000)
+  };
   function handelApprove(items) {
     Modal.confirm({
       title: "xác nhận",
@@ -179,6 +206,21 @@ export default function ApproveRestaurant() {
         title="Duyệt Quán Ăn"
         ghost={false}
       />
+       <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          margin: 15,
+          marginBottom: 0,
+        }}
+      >
+        <Search
+          style={{ width: 350 }}
+          placeholder="Tìm Kiếm ... "
+          onSearch={onSearch}
+        />
+      </div>
+      
       <Table
         style={{
           margin: "10px",
