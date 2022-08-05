@@ -12,6 +12,7 @@ import Shipper from "../screens/Layout/admin/Shipper/Shipper";
 import Admin from "../screens/Layout/admin/admin/Admin";
 import ApproveRestaurant from "../screens/Layout/admin/Approve/Restaurant";
 import ApproveShiper from "../screens/Layout/admin/Approve/Shipper";
+import Product from "../screens/Layout/restaurant/Product/Product";
 
 export const routes = [
   {
@@ -53,6 +54,11 @@ export const routes = [
     path: "/approveShipper",
     headerItem: null,
     element: <ApproveShiper />,
+  },
+  {
+    path: "/restaurantProduct",
+    headerItem: null,
+    element: <Product />,
   },
 ];
 const MakeRoutes = () => {

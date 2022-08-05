@@ -135,15 +135,6 @@ export default function ApproveRestaurant() {
     },
     {
       title: "Trạng Thái",
-      dataIndex: "status",
-      key: "status",
-      render: (item) => {
-        return <span>{item ? "Đã Duyệt" : "Chưa Duyệt"}</span>;
-      },
-      sorter: (a, b) => a.status - b.status,
-    },
-    {
-      title: "Duyệt Shipper",
       key: "Action",
       render: (item) => {
         return (
@@ -158,6 +149,7 @@ export default function ApproveRestaurant() {
           </Space>
         );
       },
+      sorter: (a, b) => a.status - b.status,
     },
   ];
   const onSearch = (value) => {

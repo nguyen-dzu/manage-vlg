@@ -47,5 +47,11 @@ export default {
   },
   ApproveShiper: (id) => {
     return axiosConfig.get(API_CONFIG.APPROVE.APPROVE_SHIPPER(id));
+  },
+  getProductRes: (postList) => {
+    return axiosConfig.get(API_CONFIG.RESTAURANT._GET_PRODUCT(postList))
+  },
+  createProduct: (param) => {
+    return axiosConfig.post(API_CONFIG.RESTAURANT._CREATE_PRODUCT, param)
   }
 };

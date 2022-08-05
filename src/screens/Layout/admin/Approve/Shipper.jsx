@@ -29,17 +29,16 @@ import Highlighter from "react-highlight-words";
 import Search from "antd/lib/input/Search";
 import { useNavigate } from "react-router";
 
-
 export default function ApproveShiper() {
   const [toDoList, setTodoList] = useState([]);
   const [postList, setPostList] = useState({
     pageSize: 10,
     current: 1,
-    SearchContent: ''
+    SearchContent: "",
   });
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState({});
-  const [value, setValue]= useState([]);
+  const [value, setValue] = useState([]);
   const navigate = useNavigate();
   useEffect(() => {
     const fetchApproveShiper = async () => {
@@ -100,24 +99,17 @@ export default function ApproveShiper() {
         />
       ),
     },
-    
+
     {
       title: "Trạng Thái",
-      dataIndex: "status",
-      key: "status",
-      render: (item) => {
-        return <span>{item ? "Đã Duyệt" : "Chưa Duyệt"}</span>;
-      },
-      sorter: (a, b) => a.status - b.status,
-    },
-    {
-      title: "Duyệt Shipper",
       key: "Action",
       render: (item) => {
         return (
           <Space size="middle">
             {item.status ? (
-              <Button type="default" disabled={true}>Đã Duyệt</Button>
+              <Button type="default" disabled={true}>
+                Đã Duyệt
+              </Button>
             ) : (
               <Button type="success" onClick={() => handelApprove(item)}>
                 Duyệt
@@ -126,6 +118,7 @@ export default function ApproveShiper() {
           </Space>
         );
       },
+      sorter: (a, b) => a.status - b.status,
     },
   ];
   function handelApprove(items) {
@@ -158,13 +151,11 @@ export default function ApproveShiper() {
     });
     setTodoList(filteredEvents);
     setPostList({
-      SearchContent: value ? value :'',
+      SearchContent: value ? value : "",
       pageSize: 10,
       current: pagination.current,
     });
-    setTimeout((
-      setLoading(true)
-    ), 3000)
+    setTimeout(setLoading(true), 3000);
   };
   return (
     <Layout>
@@ -180,8 +171,13 @@ export default function ApproveShiper() {
         <Search
           style={{ width: 350 }}
           placeholder="Tìm Kiếm ... "
-          onSearch={onSearch}
-        />      </div>
+          onChange={(e) => {
+            const currValue = e.target.value;
+            setValue(currValue);
+            onSearch(currValue);
+          }}
+        />{" "}
+      </div>
       <Table
         style={{
           margin: "10px",

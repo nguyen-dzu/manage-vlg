@@ -20,7 +20,9 @@ export const API_CONFIG = {
     CREATE_RESTAURNT:`/Restaurants`,  
     GER_FOR_ID:(id)=> `/Restaurants/${id}`,
     UPDATE_RESTAURANT:(id) => `/Restaurants/${id}`,
-    DELETE_RESTAURANT: (id) => `/Restaurants/${id}`
+    DELETE_RESTAURANT: (id) => `/Restaurants/${id}`, 
+    _GET_PRODUCT: (postList) => `/Products/Restaurateur?PageSize=${postList.pageSize}&Current=${postList.current}&SearchContent=${postList.SearchContent}`,
+    _CREATE_PRODUCT: `/Products`
   },
   SHIPPER : {
     GET_SHIPPER:(postList, roleId) =>  `/Users?RoleId=${roleId}&PageSize=${postList.pageSize}&Current=${postList.current}&SearchContent=${postList.SearchContent}`,

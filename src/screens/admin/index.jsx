@@ -183,10 +183,23 @@ export default function SiderDemo({ items, headerItem = null }) {
               </SubMenu>
             </>
           ) : role == "c812fa79-de2f-11ec-8bb8-448a5b3c2d80" ? (
-            ""
+            <>
+              {" "}
+              <Menu.Item
+                key="SANPHAM"
+                icon={<FileProtectOutlined />}
+                onClick={() => {
+                  navigate("/restaurantProduct");
+                  dispatch(actions.formActions.setNameMenu("Sản Phẩm"));
+                }}
+              >
+                Sản Phẩm
+              </Menu.Item>
+            </>
           ) : role == "c812fa79-de2f-11ec-8bb8-448a5b2c2d80" ||
             role == "c812fa78-de2f-11ec-8bb8-448a5b2c2d80" ? (
-            (dispatch(actions.authActions.logout()), localStorage.clear()), message.error('Bạn Không Có Quyền Đăng Nhập')
+            ((dispatch(actions.authActions.logout()), localStorage.clear()),
+            message.error("Bạn Không Có Quyền Đăng Nhập"))
           ) : (
             ""
           )}
