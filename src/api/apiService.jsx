@@ -53,5 +53,14 @@ export default {
   },
   createProduct: (param) => {
     return axiosConfig.post(API_CONFIG.RESTAURANT._CREATE_PRODUCT, param)
+  },
+  activeRestaurant: (id, param) => {
+    return axiosConfig.put(API_CONFIG.RESTAURANT.ACTIVE_RES(id), param);
+  },
+  getOrder: ()=>{
+    return axiosConfig.get(API_CONFIG.RESTAURANT.GET_ORDER);
+  },
+  getRestaurantProfile: () => {
+    return axiosConfig.get(API_CONFIG.RESTAURANT.GET_RESTAURANTPROFILE)
   }
 };

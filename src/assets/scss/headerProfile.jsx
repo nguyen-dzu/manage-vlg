@@ -46,12 +46,17 @@ export default function HeaderProFile() {
   );
   return (
     <div className="right">
-      <div className="mr15">
+      <div className="mr15" style={{
+        display: 'flex',
+        alignItems: 'center',
+
+      }}>
         <Badge dot={true} offset={[-2, 0]}>
           <a style={{ color: "#FFF" }}>
             <BellFilled />
           </a>
         </Badge>
+        <h3 style={{color: '#fff', marginLeft: 10}}>{getProFile.name}</h3>
       </div>
       <div>
         <Dropdown overlay={menu} overlayStyle={{ width: "20rem" }}>

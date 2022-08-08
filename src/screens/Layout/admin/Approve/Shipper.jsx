@@ -28,6 +28,7 @@ import { render } from "less";
 import Highlighter from "react-highlight-words";
 import Search from "antd/lib/input/Search";
 import { useNavigate } from "react-router";
+import SearchName from "../../Search";
 
 export default function ApproveShiper() {
   const [toDoList, setTodoList] = useState([]);
@@ -168,15 +169,8 @@ export default function ApproveShiper() {
           marginBottom: 0,
         }}
       >
-        <Search
-          style={{ width: 350 }}
-          placeholder="Tìm Kiếm ... "
-          onChange={(e) => {
-            const currValue = e.target.value;
-            setValue(currValue);
-            onSearch(currValue);
-          }}
-        />{" "}
+                <SearchName onSearch={onSearch} />
+
       </div>
       <Table
         style={{

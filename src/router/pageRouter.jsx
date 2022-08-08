@@ -13,17 +13,14 @@ import Admin from "../screens/Layout/admin/admin/Admin";
 import ApproveRestaurant from "../screens/Layout/admin/Approve/Restaurant";
 import ApproveShiper from "../screens/Layout/admin/Approve/Shipper";
 import Product from "../screens/Layout/restaurant/Product/Product";
+import InforRes from "../screens/Layout/restaurant/InforRes/InforRes";
+import Order from "../screens/Layout/restaurant/Order/Order";
 
 export const routes = [
   {
     path: "/home",
     headerItem: null,
     element: <HomePage />,
-  },
-  {
-    path: "/role",
-    headerItem: null,
-    element: <Roles />,
   },
   {
     path: "/customer",
@@ -60,6 +57,16 @@ export const routes = [
     headerItem: null,
     element: <Product />,
   },
+  {
+    path: "/infoRestaurant",
+    headerItem: null,
+    element: <InforRes />,
+  },
+  {
+    path: '/order',
+    headerItem: null,
+    element: <Order />
+  }
 ];
 const MakeRoutes = () => {
   const [checkAccessToken, setCheckAccessToken] = useState();

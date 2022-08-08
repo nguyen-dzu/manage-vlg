@@ -17,6 +17,7 @@ import {
   UserAddOutlined,
   UsergroupAddOutlined,
   FileProtectOutlined,
+  BorderOuterOutlined
 } from "@ant-design/icons";
 import React from "react";
 import HeaderProFile from "../../assets/scss/headerProfile";
@@ -93,16 +94,6 @@ export default function SiderDemo({ items, headerItem = null }) {
           </Menu.Item>
           {role == "c812fa78-de2f-11ec-8bb8-448a5b2c2d83" ? (
             <>
-              <Menu.Item
-                key="2"
-                icon={<UserSwitchOutlined />}
-                onClick={() => {
-                  navigate("/role");
-                  dispatch(actions.formActions.setNameMenu("Phân Quyền"));
-                }}
-              >
-                Phân Quyền
-              </Menu.Item>
               <SubMenu
                 key={"NGUOIDUNG"}
                 icon={<SolutionOutlined />}
@@ -190,10 +181,30 @@ export default function SiderDemo({ items, headerItem = null }) {
                 icon={<FileProtectOutlined />}
                 onClick={() => {
                   navigate("/restaurantProduct");
-                  dispatch(actions.formActions.setNameMenu("Sản Phẩm"));
+                  dispatch(actions.formActions.setNameMenu("Menu Quán"));
                 }}
               >
-                Sản Phẩm
+                Menu Quán
+              </Menu.Item>
+              <Menu.Item
+                key="infoRes"
+                icon={<ShopOutlined />}
+                onClick={() => {
+                  navigate("/infoRestaurant");
+                  dispatch(actions.formActions.setNameMenu("Thông Tin Quán"));
+                }}
+              >
+                Thông Tin Quán Ăn
+              </Menu.Item>
+              <Menu.Item
+                key="orderRes"
+                icon={<BorderOuterOutlined />}
+                onClick={() => {
+                  navigate("/order");
+                  dispatch(actions.formActions.setNameMenu("Đơn Hàng Mới"));
+                }}
+              >
+                Đơn Hàng Mới
               </Menu.Item>
             </>
           ) : role == "c812fa79-de2f-11ec-8bb8-448a5b2c2d80" ||

@@ -16,7 +16,6 @@ const slice = createSlice({
         },
         logout(state) {
             state.token = null;
-
         },
         setInfo(state, actions) {
             state.info = actions.payload

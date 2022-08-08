@@ -26,6 +26,7 @@ import uniqueId from "../../../../utils/uinqueId";
 import ActionCustomer from "./Action";
 import Search from "antd/lib/input/Search";
 import Highlighter from "react-highlight-words";
+import SearchName from "../../Search";
 export default function Customer() {
   const [toDoList, setTodoList] = useState([]);
   const [postList, setPostList] = useState({
@@ -226,11 +227,7 @@ export default function Customer() {
           marginBottom: 0,
         }}
       >
-        <Search
-          style={{ width: 350 }}
-          placeholder="Tìm Kiếm ... "
-          onSearch={onSearch}
-        />
+        <SearchName onSearch={onSearch} />
         <Button
           type="success"
           onClick={() => setAddCustomer(true)}

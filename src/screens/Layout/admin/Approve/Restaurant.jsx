@@ -26,6 +26,7 @@ import MyPagination from "../../../../components/Pagination";
 import errorHandler from "../../../../request/errorHandel";
 import Search from "antd/lib/input/Search";
 import Highlighter from "react-highlight-words";
+import SearchName from "../../Search";
 
 export default function ApproveRestaurant() {
   const [toDoList, setTodoList] = useState([]);
@@ -206,11 +207,8 @@ export default function ApproveRestaurant() {
           marginBottom: 0,
         }}
       >
-        <Search
-          style={{ width: 350 }}
-          placeholder="Tìm Kiếm ... "
-          onSearch={onSearch}
-        />
+                <SearchName onSearch={onSearch} />
+
       </div>
       
       <Table

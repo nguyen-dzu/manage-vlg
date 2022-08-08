@@ -26,6 +26,7 @@ import uniqueId from "../../../../utils/uinqueId";
 import ActionAdmin from "./Action";
 import Search from "antd/lib/input/Search";
 import Highlighter from "react-highlight-words";
+import SearchName from "../../Search";
 
 export default function Admin() {
   const [toDoList, setTodoList] = useState([]);
@@ -230,11 +231,8 @@ export default function Admin() {
           marginBottom: 0,
         }}
       >
-        <Search
-          style={{ width: 350 }}
-          placeholder="Tìm Kiếm ... "
-          onSearch={onSearch}
-        />
+                <SearchName onSearch={onSearch} />
+
         <Button
           type="success"
           onClick={() => setAddAdmin(true)}

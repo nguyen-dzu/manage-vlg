@@ -22,7 +22,10 @@ export const API_CONFIG = {
     UPDATE_RESTAURANT:(id) => `/Restaurants/${id}`,
     DELETE_RESTAURANT: (id) => `/Restaurants/${id}`, 
     _GET_PRODUCT: (postList) => `/Products/Restaurateur?PageSize=${postList.pageSize}&Current=${postList.current}&SearchContent=${postList.SearchContent}`,
-    _CREATE_PRODUCT: `/Products`
+    _CREATE_PRODUCT: `/Products`,
+    ACTIVE_RES: (id) => `/Restaurants/${id}/Active`,
+    GET_ORDER: '/Orders/Restaurant',
+    GET_RESTAURANTPROFILE: '/Restaurants/RestaurantProfile'
   },
   SHIPPER : {
     GET_SHIPPER:(postList, roleId) =>  `/Users?RoleId=${roleId}&PageSize=${postList.pageSize}&Current=${postList.current}&SearchContent=${postList.SearchContent}`,
@@ -34,4 +37,3 @@ export const API_CONFIG = {
     APPROVE_SHIPPER: (id) => `/RegisterShippers/${id}/Approve`,
   }
 };
-

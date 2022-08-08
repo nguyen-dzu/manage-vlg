@@ -6,6 +6,8 @@ const config = combineReducers({
     auth: reducers.authReducers,
     menu: reducers.menuReducer,
     form: reducers.formReducer,
+    restaurant: reducers.restaurantReducers,
+    order: reducers.orderReducer
     // banner: reducers.bannerReducer,
     // order: reducers.orderReducer,
     // news: reducers.newsReducer,

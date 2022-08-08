@@ -31,6 +31,7 @@ import { useNavigate } from "react-router";
 import uniqueId from "../../../../utils/uinqueId";
 import { actions } from "../../../../redux";
 import { useAppDispatch } from "../../../../hook/useRedux";
+import SearchName from "../../Search";
 
 export default function Restaurant() {
   const [toDoList, setTodoList] = useState([]);
@@ -144,8 +145,8 @@ export default function Restaurant() {
           <>
             <Popconfirm
               title={!status ? "Kích hoạt quán ăn này ?" : "Khóa quán ăn này ?"}
-              // onConfirm={() => confirmStatus(status, item.id, item.stt)}
-              // onCancel={cancel}
+              onConfirm={() => confirmStatus(status, item.id, item.stt)}
+              onCancel={cancel}
               okText="Yes"
               cancelText="No"
               placement="left"
@@ -166,6 +167,42 @@ export default function Restaurant() {
     },
   ];
 
+  function confirmStatus(status, id, index) {
+    const updateStatus = async () => {
+      const data = await apiService.activeRestaurant(id, {isActive: !status});
+      console.log(data)
+      if (data.data.isActive == status) {
+        notification.error({
+          message: status
+            ? "Khóa không thành công"
+            : "Kích hoạt không thành công",
+        });
+      } else {
+        if (!status) {
+          notification.success({
+            message: "kích hoạt thành công",
+          });
+        } else {
+          notification.success({
+            message: "khóa thành công",
+          });
+        }
+        const tamp = [...toDoList];
+        tamp[index - 1] = { ...tamp[index - 1], isActive: !status };
+        setTodoList(tamp);
+      }
+      setLoading(true);
+      if (data) {
+        setTimeout(() => {
+          setLoading(false);
+        }, 3000);
+      }
+    };
+    updateStatus();
+  }
+  function cancel(e) {
+    message.error("Click on No");
+  }
   const onSearch = (value) => {
     setValue([value]);
     const filteredEvents = toDoList.filter(({ fullName }) => {
@@ -174,11 +211,13 @@ export default function Restaurant() {
     });
     setTodoList(filteredEvents);
     setPostList({
-      SearchContent: value ? value : "",
+      SearchContent: value ? value :'',
       pageSize: 10,
       current: pagination.current,
     });
-    setTimeout(setLoading(true), 3000);
+    setTimeout((
+      setLoading(true)
+    ), 3000)
   };
   return (
     <Layout>
@@ -191,11 +230,7 @@ export default function Restaurant() {
           marginBottom: 0,
         }}
       >
-        <Search
-          style={{ width: 350 }}
-          placeholder="Tìm Kiếm ... "
-          onSearch={onSearch}
-        />
+        <SearchName onSearch={onSearch} />
         <Button
           type="success"
           onClick={() => {

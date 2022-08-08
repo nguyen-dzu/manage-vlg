@@ -28,6 +28,7 @@ import Highlighter from "react-highlight-words";
 import Search from "antd/lib/input/Search";
 import { useAppDispatch } from "../../../../hook/useRedux";
 import { actions } from "../../../../redux";
+import SearchName from "../../Search";
 //   import ActionShipper from "./Action";
 export default function Shipper() {
   const [toDoList, setTodoList] = useState([]);
@@ -233,9 +234,7 @@ export default function Shipper() {
           marginBottom: 0,
         }}
       >
-        <Search
-          style={{ width: 350 }}
-          placeholder="Tìm Kiếm ... "
+        <SearchName
           onSearch={onSearch}
         />
         <Button
