@@ -1,14 +1,14 @@
 .title {
   font-size: 18px;
   font-weight: 600;
-  width: 150px;
+  width: 200px;
 }
 
 .containerDesx {
   background-color: #f8f8f8;
   border-radius: 8px;
   width: 50%;
-  height: 35px;
+  height: 100%;
   display: flex;
   align-items: center;
 }
@@ -21,4 +21,9 @@
   display: flex;
   align-items: Center;
   margin-top: 10px;
+}
+
+.infor_title{
+  font-weight: 600;
+  font-size: 15;
 }

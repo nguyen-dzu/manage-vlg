@@ -1,14 +1,16 @@
-import { Image, Layout, Spin } from "antd";
+import { Button, Image, Layout, Spin } from "antd";
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../hook/useRedux";
 import bannerRestaurant from "../../../../assets/img/restaurantnoAvatar.png";
 import apiService from "../../../../api/apiService";
 import "./index.scss";
-import { HddFilled } from "@ant-design/icons";
+import { HddFilled, ProjectFilled } from "@ant-design/icons";
+import EditInfoRes from "./EditInfoRes";
 export default function InforRes() {
   const [profileRes, setProfileRes] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const [updateRes, setUpdateRes] = useState(false);
+  const [valueRes, setValueRes] = useState([]);
   useEffect(() => {
     const fetchRestaurantProfile = async () => {
       const reponse = await apiService.getRestaurantProfile();
@@ -19,8 +21,11 @@ export default function InforRes() {
       });
     };
     fetchRestaurantProfile();
-  }, []);
-
+  }, [updateRes]);
+  const handelEdit = (item) => {
+    setValueRes(item);
+    setUpdateRes(true);
+  };
   return (
     <Layout>
       <div
@@ -28,15 +33,34 @@ export default function InforRes() {
           marginTop: 10,
         }}
       >
-        <span
+        <div
           style={{
-            color: "#c02424",
-            fontSize: 20,
-            fontWeight: "600",
+            display: "flex",
+            justifyContent: "space-between",
           }}
         >
-          Thông Tin Quán
-        </span>
+          <span
+            style={{
+              color: "#c02424",
+              fontSize: 20,
+              fontWeight: "600",
+            }}
+          >
+            Thông Tin Quán
+          </span>
+          <Button
+            style={{
+              marginBottom: 5,
+            }}
+            type="success"
+            onClick={() => {
+              handelEdit(profileRes);
+            }}
+          >
+            Chỉnh Sửa
+          </Button>
+        </div>
+
         <div
           style={{
             width: "100%",
@@ -131,6 +155,9 @@ export default function InforRes() {
                   <HddFilled
                     style={{
                       marginLeft: 10,
+                      height: 40,
+                      marginTop: 15,
+                      fontSize: 20
                     }}
                   />
                   <span className="desc">{profileRes.address}</span>-
@@ -146,20 +173,39 @@ export default function InforRes() {
                 </div>
               </div>
               <div className="containerInfo">
-                <span className="title">Chủ Sở Hữu</span>
-                <div className="containerDesx">
-                  <HddFilled
+                <span className="title">Thông Tin Chủ Sở Hữu</span>
+                <div className="containerDesx" style={{
+                }}>
+                  <ProjectFilled 
                     style={{
                       marginLeft: 10,
+                      height: 90,
+                      fontSize: 20,
                     }}
                   />
-                  <span className="desc">{profileRes.user?.fullName}</span>
+                  <div style={{
+                      marginTop: 10
+                  }}>
+                    <p className="desc"><span className="infor_title">Họ Và Tên: </span> {profileRes.user?.fullName}</p>
+                    <p className="desc"><span className="infor_title">Email: </span> {profileRes.user?.emailAddress}</p>
+                    <p className="desc"><span className="infor_title">Số Điện Thoại: </span> {profileRes.user?.phoneNumber ? profileRes.user?.phoneNumber : <span style={{
+                      color: "#bd2130"
+                    }}>*Bạn chưa có số điện thoại</span>}</p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </Spin>
       </Layout>
+      <EditInfoRes
+        updateInfoRess={updateRes}
+        setUpdateInfoRess={setUpdateRes}
+        setItem={setValueRes}
+        item={valueRes}
+        loadingUpdate={loading}
+        setLoadingUpdate={setLoading}
+      />
     </Layout>
   );
 }

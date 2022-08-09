@@ -18,60 +18,69 @@ import {
   UploadOutlined,
 } from "@ant-design/icons";
 
-export default function AddProduct({ addProduct, setAddProduct }) {
+export default function AddProduct({
+  item,
+  setItem,
+  addProduct,
+  setAddProduct,
+  loading,
+  setLoading,
+}) {
+  console.log(item);
   const [form] = Form.useForm();
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const {Option} = Select;
+  const [listProduct, setListProduct] = useState([]);
+  const { Option } = Select;
   const frmData = new FormData();
-  const handelOk = () => {
-    form.validateFields().then(async (values) => {
-      console.log(values);
-      frmData.append("Name", values.Name);
-      frmData.append("Price", values.Price);
-      frmData.append("Description", values.Description);
-      frmData.append("Image", values.Image.file);
-      frmData.append("ProductTypeId", values.ProductTypeId);
 
-      // // const Products = {
-      //   //   Name: values.Name,
-      //   //   Price: values.Price,
-      //   //   Description: values.Description,
-      //   //   Image: frmData,
-      //   //   ProductTypeId: values.ProductTypeId,
-      //   // };
-      console.log(frmData);
-      setConfirmLoading(true);
-      const data = await apiService.createProduct(frmData);
-      if (data) {
-        message.success("thêm thành công");
-      }
-      setAddProduct(false);
-      form.resetFields();
-    });
-    //   .catch((info) => {
-    //     message.error("Tạo sản phẩm không thành công");
-    //   });
+  const handelOk = () => {
+    form
+      .validateFields()
+      .then(async (values) => {
+        frmData.append("Name", values.Name);
+        frmData.append("Price", values.Price);
+        frmData.append("Description", values.Description);
+        frmData.append("Image", values.Image.file);
+        frmData.append("ProductTypeId", values.ProductTypeId);
+
+        setConfirmLoading(true);
+        setLoading(!loading);
+        if (item.id) {
+          const data = await apiService.updateProduct(item.id, values);
+          if (data) {
+            message.success("thêm thành công");
+          }
+        } else {
+          const data = await apiService.createProduct(frmData);
+          if (data) {
+            message.success("thêm thành công");
+          }
+        }
+
+        setAddProduct(false);
+        form.resetFields();
+      })
+      .catch((info) => {
+        message.error("Thực hiện không thành công");
+      });
   };
 
   const handelCancel = () => {
     form.resetFields();
+    setItem("");
     setAddProduct(false);
   };
-  // const HandelUpload = (options) => {
-  //   if (options.target && options.target.files[0]) {
-  //     frmData.append('file', options.target.files[0])
-  //   }
-  // }
+
   return (
     <>
       <Modal
-        title={"thêm khách hàng"}
+        title={item.id ? "Chỉnh Sửa Sản Phẩm" : "Thêm Sản Phẩm"}
         visible={addProduct}
         onOk={handelOk}
         onCancel={handelCancel}
         confirmLoading={confirmLoading}
-        okText={"thêm mới"}
+        okText={item.id ? "Lưu Thay đổi" : "Thêm Mới"}
+        cancelText={"Hủy"}
       >
         <Form
           form={form}
@@ -88,7 +97,7 @@ export default function AddProduct({ addProduct, setAddProduct }) {
               { require: true, message: "vui lòng nhập vào tên sản phẩm" },
             ]}
           >
-            <Input />
+            <Input placeholder={item.id ? item.name : ""} />
           </Form.Item>
           <Form.Item
             label="Giá Sản Phẩm"
@@ -97,24 +106,29 @@ export default function AddProduct({ addProduct, setAddProduct }) {
               { require: true, message: "vui lòng nhập vào giá sản phẩm" },
             ]}
           >
-            <InputNumber addonAfter= 'VNĐ' controls={false} />
+            <Input type={"number"} placeholder={item.id ? item.price : ""} />
           </Form.Item>
           <Form.Item
             label="Mô Tả"
             name={"Description"}
             rules={[{ require: true, message: "vui lòng nhập vào mô tả" }]}
           >
-            <Input />
+            <Input placeholder={item.id ? item.description : ""} />
           </Form.Item>
-          <Form.Item
-            label="Hình Ảnh Sản Phẩm"
-            name={"Image"}
-            // rules={[{ require: true, message: "vui chọn ảnh sản phẩm" }]}
-          >
-            <Upload listType="text" beforeUpload={() => false} maxCount={1}>
-              <Button icon={<UploadOutlined />}>Upload</Button>
-            </Upload>
-          </Form.Item>
+          {item.id ? (
+            <Form.Item label="Hình Ảnh Sản Phẩm" name={"Image"}>
+              <Image src={`http://localhost:8500/${item.image}`} />
+              <Upload listType="text" beforeUpload={() => false} maxCount={1}>
+                <Button icon={<UploadOutlined />}>Upload</Button>
+              </Upload>
+            </Form.Item>
+          ) : (
+            <Form.Item label="Hình Ảnh Sản Phẩm" name={"Image"}>
+              <Upload listType="text" beforeUpload={() => false} maxCount={1}>
+                <Button icon={<UploadOutlined />}>Upload</Button>
+              </Upload>
+            </Form.Item>
+          )}
           <Form.Item
             label="Loại Sản Phẩm"
             name={"ProductTypeId"}

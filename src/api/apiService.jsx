@@ -62,5 +62,8 @@ export default {
   },
   getRestaurantProfile: () => {
     return axiosConfig.get(API_CONFIG.RESTAURANT.GET_RESTAURANTPROFILE)
+  },
+  updateProduct: (id, param) => {
+    return axiosConfig.put(API_CONFIG.PRODUCT.UPDATE_PRODUCT(id), param)
   }
 };

@@ -35,5 +35,8 @@ export const API_CONFIG = {
     APPROVE_RESTAURANT: (id) => `/RegisterRestaurants/${id}/Approve`,
     GET_SHIPPER:(postList) => `/RegisterShippers?PageSize=${postList.pageSize}&Current=${postList.current}&SearchContent=${postList.SearchContent}`,
     APPROVE_SHIPPER: (id) => `/RegisterShippers/${id}/Approve`,
+  },
+  PRODUCT: {
+    UPDATE_PRODUCT: (id) => `/Products/${id}`
   }
 };

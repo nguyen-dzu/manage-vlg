@@ -1,4 +1,13 @@
-import { Button, Col, Divider, Image, Layout, PageHeader, Row, Spin } from "antd";
+import {
+  Button,
+  Col,
+  Divider,
+  Image,
+  Layout,
+  PageHeader,
+  Row,
+  Spin,
+} from "antd";
 import React, { useEffect, useState } from "react";
 import apiService from "../../../../api/apiService";
 import MyPagination from "../../../../components/Pagination";
@@ -21,6 +30,7 @@ export default function Product() {
   const [addProduct, setAddProduct] = useState(false);
   const dispatch = useAppDispatch();
   const [pagination, setPagination] = useState({});
+  const [updateProduct, setUpdateProduct] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,7 +39,7 @@ export default function Product() {
         if (data) {
           const { pagedData } = data.data;
           setListProduct(pagedData);
-          dispatch(actions.restaurantActions.setInfo(pagedData))
+          dispatch(actions.restaurantActions.setInfo(pagedData));
         }
         setPagination(data.data.pageInfo);
       } catch (error) {
@@ -42,7 +52,8 @@ export default function Product() {
     fetchData();
   }, [postList, addProduct]);
   const handelEdit = (item) => {
-    console.log(item);
+    setUpdateProduct(item);
+    setAddProduct(true);
   };
   return (
     <Layout key={`${uniqueId()}`}>
@@ -50,7 +61,7 @@ export default function Product() {
         title="Sản Phẩm Của Bạn"
         ghost={false}
         style={{
-          marginBottom: 10
+          marginBottom: 10,
         }}
         extra={[
           <Button onClick={() => setAddProduct(true)} type="success">
@@ -123,7 +134,14 @@ export default function Product() {
           />
         </Divider>
       }
-      <AddProduct addProduct={addProduct} setAddProduct={setAddProduct} />
+      <AddProduct
+        item={updateProduct}
+        setItem={setUpdateProduct}
+        addProduct={addProduct}
+        setAddProduct={setAddProduct}
+        loading={loading}
+        setLoading={setLoading}
+      />
     </Layout>
   );
 }

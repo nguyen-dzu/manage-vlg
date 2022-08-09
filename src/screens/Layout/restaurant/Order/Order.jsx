@@ -84,6 +84,11 @@ export default function Order() {
       title: "trạng thái",
       dataIndex: "orderStatus",
       key: "orderStatus",
+      render: (item) =>{
+        return(
+          {}
+        )
+      }
     },
   ];
   return (
