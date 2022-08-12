@@ -17,13 +17,14 @@ export default function ActionAdmin({
       .then(async (values) => {
         setConfirmLoading(true);
         const valuesAdmin = {
-          emailAddress: values.emailAddress,
+          emailAddress: values.emailAddress,  
           password: values.password,
           fullName: values.fullName,
           phoneNumber: values.phoneNumber,
           roleId: "c812fa78-de2f-11ec-8bb8-448a5b2c2d83",
         };
-        const data = await apiService.createAdmin(valuesAdmin);
+        console.log(valuesAdmin)
+        const data = await apiService.createCustomer(valuesAdmin);
         if (data) {
           message.success("thêm thành công");
         }
@@ -36,6 +37,9 @@ export default function ActionAdmin({
         message.error(
           "Tạo tài khoản không thành công, có thể email đã tồn tại"
         );
+        console.log(info)
+        setLoadingAdmin(false)
+        setAddAdmin(false);
       });
   };
   const handelCancel = () => {
@@ -46,12 +50,13 @@ export default function ActionAdmin({
   return (
     <>
       <Modal
-        title={"thêm Admin"}
+        title={"Thêm Admin"}
         visible={addAdmin}
         onOk={handelOk}
         onCancel={handelCancel}
         confirmLoading={confirmLoading}
-        okText={"thêm mới"}
+        okText={"Thêm mới"}
+        cancelText={'Hủy'}
       >
         <Form
           form={form}

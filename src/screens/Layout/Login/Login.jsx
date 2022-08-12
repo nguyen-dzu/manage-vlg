@@ -127,7 +127,7 @@ function Login() {
               <Form.Item {...tailLayout}>
                 <Spin indicator={antIcon} spinning={loading}>
                   <Button type="primary" htmlType="submit">
-                    Login
+                    Đăng Nhập
                   </Button>
                 </Spin>
               </Form.Item>

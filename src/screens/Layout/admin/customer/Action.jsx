@@ -51,12 +51,13 @@ export default function ActionCustomer({
   return (
     <>
       <Modal
-        title={"thêm khách hàng"}
+        title={"Thêm Khách Hàng"}
         visible={addCustomer}
         onOk={handelOk}
         onCancel={handelCancel}
         confirmLoading={confirmLoading}
-        okText={"thêm mới"}
+        okText={"Thêm mới"}
+        cancelText={'Hủy'}
       >
         <Form
           form={form}
@@ -99,7 +100,7 @@ export default function ActionCustomer({
             <Input type="email" autoComplete="off" />
           </Form.Item>
           <Form.Item
-            label="password"
+            label="Mật Khẩu"
             name="password"
             rules={[
               {

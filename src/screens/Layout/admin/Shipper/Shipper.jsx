@@ -89,7 +89,7 @@ export default function Shipper() {
       width: "7%",
     },
     {
-      title: "avatar",
+      title: "Ảnh Đại Diện",
       dataIndex: "avatar",
       key: "avatar",
       width: "10%",
@@ -131,7 +131,7 @@ export default function Shipper() {
       key: "phoneNumber",
     },
     {
-      title: "trạng thái",
+      title: "Trạng Thái",
       dataIndex: "isActive",
       key: "isActive",
       render: (status, item) => {
@@ -151,7 +151,7 @@ export default function Shipper() {
                 type={!status ? "danger" : "primary"}
                 icon={!status ? <LockOutlined /> : <UnlockOutlined />}
               >
-                {!status ? "đã khóa" : "đang hoạt động"}
+                {!status ? "Đã Khóa" : "Đang Hoạt Động"}
               </Button>
             </Popconfirm>
           </>

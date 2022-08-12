@@ -34,10 +34,11 @@ export default function EditInfoRes({
     form
       .validateFields()
       .then(async (values) => {
-        frmData.append("Name", values.Name ? values.Name : true);
-        frmData.append("Address", values.Address);
-        frmData.append("IsActive", values.IsActive);
-        frmData.append("Banner", values.Banner.file);
+        console.log(values);
+        frmData.append("Name", values.Name ? values.Name : item.name);
+        frmData.append("Address", values.Address ? values.Address : item.address);
+        frmData.append("IsActive", values.IsActive ? values.IsActive : item.isActive);
+        frmData.append("banner", values.Banner ? values.Banner : `http://localhost:8500/${item.banner}`);
         setLoading(true);
         const data = await apiService.updateRestaurant(item.id, frmData);
         if (data) {
@@ -89,10 +90,10 @@ export default function EditInfoRes({
         autoComplete="off"
       >
         <Form.Item label="Tên Cửa Hàng" name="Name">
-          <Input placeholder={item.id ? item.name : ''}/>
+          <Input placeholder={item.id ? item.name : ""} />
         </Form.Item>
         <Form.Item label="Địa Chỉ Cửa Hàng" name="Address">
-          <Input placeholder={item.id ? item.address : ''} />
+          <Input placeholder={item.id ? item.address : ""} />
         </Form.Item>
         <Form.Item label="Trạng Thái Cửa Hàng" name="IsActive">
           <Radio.Group defaultValue={true}>
@@ -100,8 +101,8 @@ export default function EditInfoRes({
             <Radio value={false}>Không Hoạt Động</Radio>
           </Radio.Group>
         </Form.Item>
-        <Form.Item label="Tên Cửa Hàng" name="Banner">
-          <Image src={`http://localhost:8500/${item.banner}`} />
+        <Image src={`http://localhost:8500/${item.banner}`} />
+        <Form.Item label="Ảnh Bìa" name="Banner">
           <Upload listType="text" beforeUpload={() => false} maxCount={1}>
             <Button icon={<UploadOutlined />}>Upload</Button>
           </Upload>

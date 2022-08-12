@@ -107,7 +107,7 @@ export default function Restaurant() {
       key: "address",
     },
     {
-      title: "banner",
+      title: "Ảnh Bìa",
       dataIndex: "banner",
       key: "banner",
       render: (item) => {
@@ -137,7 +137,7 @@ export default function Restaurant() {
       sorter: (a, b) => a.addressType - b.addressType,
     },
     {
-      title: "trạng thái",
+      title: "Trạng Thái",
       dataIndex: "isActive",
       key: "isActive",
       render: (status, item) => {
@@ -155,7 +155,7 @@ export default function Restaurant() {
                 type={!status ? "danger" : "primary"}
                 icon={!status ? <LockOutlined /> : <UnlockOutlined />}
               >
-                {!status ? "đã khóa" : "đang hoạt động"}
+                {!status ? "Đã Khóa" : "Đang Hoạt Động"}
               </Button>
             </Popconfirm>
           </>

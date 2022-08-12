@@ -75,7 +75,7 @@ export default function Admin() {
       }
     };
     fetchUserAdmin();
-  }, [postList]);
+  }, [postList, addAdmin, loadingAdmin]);
 
   const columns = [
     {
@@ -85,7 +85,7 @@ export default function Admin() {
       width: "7%",
     },
     {
-      title: "avatar",
+      title: "Ảnh Đại Diện",
       dataIndex: "avatar",
       key: "avatar",
       width: "10%",
@@ -127,7 +127,7 @@ export default function Admin() {
       key: "phoneNumber",
     },
     {
-      title: "trạng thái",
+      title: "Trạng Thái",
       dataIndex: "isActive",
       key: "isActive",
       render: (status, item) => {
@@ -147,7 +147,7 @@ export default function Admin() {
                 type={!status ? "danger" : "primary"}
                 icon={!status ? <LockOutlined /> : <UnlockOutlined />}
               >
-                {!status ? "đã khóa" : "đang hoạt động"}
+                {!status ? "Đã Khóa" : "Đang Hoạt Động"}
               </Button>
             </Popconfirm>
           </>

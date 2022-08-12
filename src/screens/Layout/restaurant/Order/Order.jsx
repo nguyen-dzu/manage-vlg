@@ -1,63 +1,75 @@
-import { Layout, notification, PageHeader, Table } from "antd";
+import {
+  Button,
+  Layout,
+  message,
+  Modal,
+  notification,
+  PageHeader,
+  Table,
+} from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import apiService from "../../../../api/apiService";
 import { useAppDispatch, useAppSelector } from "../../../../hook/useRedux";
 import { actions } from "../../../../redux";
 import errorHandler from "../../../../request/errorHandel";
-
+import { ExclamationCircleOutlined } from "@ant-design/icons";
 export default function Order() {
   const [toDoList, setTodoList] = useState([]);
   const [loading, setLoading] = useState(true);
   const dispatch = useAppDispatch();
-  const inforOrder = useAppSelector((state) => state.order.orderData)
+  const inforOrder = useAppSelector((state) => state.order.orderData);
   useEffect(() => {
     const timerData2 = setTimeout(() => {
+      const callData = async () => {
+        const data = await apiService.getOrder();
+        dispatch(actions.orderActions.setOrder(data.data));
+      };
       callData();
-    }, 4000)
+    }, 3500);
     const timer = setTimeout(() => {
+      const fetchUserOrder = async () => {
+        try {
+          const data = await apiService.getOrder();
+          if (data) {
+            setTodoList(
+              data.data.map((item, index) => {
+                return {
+                  key: item.id,
+                  stt: index + 1,
+                  address: item.address,
+                  phoneNumber: item.phoneNumber,
+                  note: item.note,
+                  shippingFee: item.shippingFee,
+                  total: item.total,
+                  orderStatus: item.orderStatus,
+                };
+              })
+            );
+          }
+          setTimeout(() => {
+            setLoading(false);
+          });
+        } catch (error) {
+          errorHandler(error);
+        }
+      };
       fetchUserOrder();
-      if(toDoList.length > inforOrder.length){
-        notification.success({
-          message: 'Bạn Có Đơn Hàng Mới',
-        })
-        inforOrder([...toDoList])
+    }, 3000);
+    setTimeout(() => {
+      if (toDoList.length > inforOrder.length) {
+        Modal.confirm({
+          title: "Đơn Hàng Mới",
+          icon: <ExclamationCircleOutlined />,
+          content: "Bạn có đơn hàng mới",
+          okText: "Nhận",
+          cancelText: "Hủy",
+          okType: "success",
+        });
       }
-    }, 3000)
-    return () => clearTimeout(timer, timerData2)
+    }, 1000);
+    return () => clearTimeout(timer, timerData2);
   }, [toDoList]);
-
-  const fetchUserOrder = async () => {
-    try {
-      const data = await apiService.getOrder();
-      if (data) {
-        setTodoList(
-          data.data.map((item, index) => {
-            return {
-              key: item.id,
-              stt: index + 1,
-              address: item.address,
-              phoneNumber: item.phoneNumber,
-              note: item.note,
-              shippingFee: item.shippingFee,
-              total: item.total,
-              orderStatus: item.orderStatus,
-            };
-          })
-        );
-      }
-      setTimeout(() => {
-        setLoading(false);
-      });
-    } catch (error) {
-      errorHandler(error);
-    }
-  };
-
-  const callData = async () =>{ 
-    const data = await apiService.getOrder();
-    dispatch(actions.orderActions.setOrder(data.data))
-  }
-
+  console.log(toDoList)
   const columns = [
     {
       title: "STT",
@@ -81,19 +93,65 @@ export default function Order() {
       key: "note",
     },
     {
-      title: "trạng thái",
+      title: "Tổng Đơn Hàng",
+      dataIndex: "total",
+      key: "total",
+      render: (item) => {
+        return(
+          item.toLocaleString("vi", {
+            style: "currency",
+            currency: "VND",
+          })
+        )
+      },
+    },
+    {
+      title: "Thu Nhập",
+      key: "thushiper",
+      render: (item) => {
+        const result = item.total - item.shippingFee;
+        return (
+          <span>
+            {result.toLocaleString("vi", {
+              style: "currency",
+              currency: "VND",
+            })}
+          </span>
+        );
+      },
+    },
+    {
+      title: "Trạng Thái",
       dataIndex: "orderStatus",
       key: "orderStatus",
-      render: (item) =>{
-        return(
-          {}
-        )
-      }
+      render: (item) => {
+        return (
+          <Button disabled={true}>
+            {item == 0
+              ? "Đang chuẩn bị"
+              : item == 1
+              ? "Đang giao"
+              : item == 2
+              ? "Hoàn thành"
+              : "Đã hủy"}
+          </Button>
+        );
+      },
     },
   ];
   return (
     <Layout>
       <PageHeader title="Quản Lý Đơn Hàng " ghost={false} />
+      <div style={{
+        width: 200,
+        height: 40,
+        backgroundColor: '#FFF',
+        margin: 15,
+        padding: 9,
+        color: '#bd2130'
+      }}>
+      <span style={{fontWeight: '600'}}>Phí Shipper: 10.000 VNĐ</span>
+      </div>
       <Table
         style={{
           margin: "10px",

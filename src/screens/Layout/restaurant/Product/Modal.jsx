@@ -46,9 +46,9 @@ export default function AddProduct({
         setConfirmLoading(true);
         setLoading(!loading);
         if (item.id) {
-          const data = await apiService.updateProduct(item.id, values);
+          const data = await apiService.updateProduct(item.id, frmData);
           if (data) {
-            message.success("thêm thành công");
+            message.success("sửa thành công");
           }
         } else {
           const data = await apiService.createProduct(frmData);
@@ -61,7 +61,7 @@ export default function AddProduct({
         form.resetFields();
       })
       .catch((info) => {
-        message.error("Thực hiện không thành công");
+        message.error(`Thực hiện không thành công ${info}`);
       });
   };
 
@@ -79,7 +79,7 @@ export default function AddProduct({
         onOk={handelOk}
         onCancel={handelCancel}
         confirmLoading={confirmLoading}
-        okText={item.id ? "Lưu Thay đổi" : "Thêm Mới"}
+        okText={item.id ? "Lưu Thay Đổi" : "Thêm Mới"}
         cancelText={"Hủy"}
       >
         <Form
@@ -115,20 +115,14 @@ export default function AddProduct({
           >
             <Input placeholder={item.id ? item.description : ""} />
           </Form.Item>
-          {item.id ? (
-            <Form.Item label="Hình Ảnh Sản Phẩm" name={"Image"}>
-              <Image src={`http://localhost:8500/${item.image}`} />
+          {item.id ? 
+            <Image src={`http://localhost:8500/${item.image}`} />
+          : ''}
+          <Form.Item label="Hình Ảnh Sản Phẩm" name={"Image"}>
               <Upload listType="text" beforeUpload={() => false} maxCount={1}>
                 <Button icon={<UploadOutlined />}>Upload</Button>
               </Upload>
             </Form.Item>
-          ) : (
-            <Form.Item label="Hình Ảnh Sản Phẩm" name={"Image"}>
-              <Upload listType="text" beforeUpload={() => false} maxCount={1}>
-                <Button icon={<UploadOutlined />}>Upload</Button>
-              </Upload>
-            </Form.Item>
-          )}
           <Form.Item
             label="Loại Sản Phẩm"
             name={"ProductTypeId"}
