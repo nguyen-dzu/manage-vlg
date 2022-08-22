@@ -12,11 +12,12 @@ import apiService from "../../../../api/apiService";
 import { useAppDispatch, useAppSelector } from "../../../../hook/useRedux";
 import { actions } from "../../../../redux";
 import errorHandler from "../../../../request/errorHandel";
-import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { ExclamationCircleOutlined, SearchOutlined, CheckCircleOutlined, ClockCircleOutlined, IssuesCloseOutlined,CloseCircleOutlined } from "@ant-design/icons";
 export default function Order() {
   const [toDoList, setTodoList] = useState([]);
   const [loading, setLoading] = useState(true);
   const dispatch = useAppDispatch();
+  const [showOrder, setShowOrder] = useState(false)
   const inforOrder = useAppSelector((state) => state.order.orderData);
   useEffect(() => {
     const timerData2 = setTimeout(() => {
@@ -69,7 +70,6 @@ export default function Order() {
     }, 1000);
     return () => clearTimeout(timer, timerData2);
   }, [toDoList]);
-  console.log(toDoList)
   const columns = [
     {
       title: "STT",
@@ -97,12 +97,10 @@ export default function Order() {
       dataIndex: "total",
       key: "total",
       render: (item) => {
-        return(
-          item.toLocaleString("vi", {
-            style: "currency",
-            currency: "VND",
-          })
-        )
+        return item.toLocaleString("vi", {
+          style: "currency",
+          currency: "VND",
+        });
       },
     },
     {
@@ -126,15 +124,30 @@ export default function Order() {
       key: "orderStatus",
       render: (item) => {
         return (
-          <Button disabled={true}>
-            {item == 0
-              ? "Đang chuẩn bị"
-              : item == 1
-              ? "Đang giao"
-              : item == 2
-              ? "Hoàn thành"
-              : "Đã hủy"}
-          </Button>
+          <>
+            {item == 0 ? (
+              <Button ghost type="warning" icon={<ClockCircleOutlined />}>Đang chuẩn bị</Button>
+            ) : item == 1 ? (
+              <Button ghost type="info" icon={<IssuesCloseOutlined />}>Đang giao</Button>
+            ) : item == 2 ? (
+              <Button ghost type="success" icon={<CheckCircleOutlined />}>Đã Hoàn Thành</Button>
+            ) : (
+              <Button ghost type="danger" icon={<CloseCircleOutlined />}>Hủy</Button>
+            )}
+          </>
+        );
+      },
+    },
+    {
+      title: "Hành Động",
+      key: "actions",
+      render: (item) => {
+        return (
+          <>
+            <Button icon={<SearchOutlined />} type="info">
+              Xem Thêm
+            </Button>
+          </>
         );
       },
     },
@@ -142,15 +155,17 @@ export default function Order() {
   return (
     <Layout>
       <PageHeader title="Quản Lý Đơn Hàng " ghost={false} />
-      <div style={{
-        width: 200,
-        height: 40,
-        backgroundColor: '#FFF',
-        margin: 15,
-        padding: 9,
-        color: '#bd2130'
-      }}>
-      <span style={{fontWeight: '600'}}>Phí Shipper: 10.000 VNĐ</span>
+      <div
+        style={{
+          width: 200,
+          height: 40,
+          backgroundColor: "#FFF",
+          margin: 15,
+          padding: 9,
+          color: "#bd2130",
+        }}
+      >
+        <span style={{ fontWeight: "600" }}>Phí Shipper: 10.000 VNĐ</span>
       </div>
       <Table
         style={{

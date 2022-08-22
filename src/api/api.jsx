@@ -38,5 +38,9 @@ export const API_CONFIG = {
   },
   PRODUCT: {
     UPDATE_PRODUCT: (id) => `/Products/${id}`
+  },
+  DASHBOARD: {
+    GET_DATA_ADMIN: '/Dashboards/Admin',
+    GET_DATA_RESTAURANT: '/Dashboards/Restaurateur'
   }
 };

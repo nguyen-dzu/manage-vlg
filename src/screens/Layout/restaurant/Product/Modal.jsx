@@ -17,6 +17,7 @@ import {
   PlusOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
+import TextArea from "antd/lib/input/TextArea";
 
 export default function AddProduct({
   item,
@@ -26,7 +27,6 @@ export default function AddProduct({
   loading,
   setLoading,
 }) {
-  console.log(item);
   const [form] = Form.useForm();
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [listProduct, setListProduct] = useState([]);
@@ -37,11 +37,11 @@ export default function AddProduct({
     form
       .validateFields()
       .then(async (values) => {
-        frmData.append("Name", values.Name);
-        frmData.append("Price", values.Price);
-        frmData.append("Description", values.Description);
-        frmData.append("Image", values.Image.file);
-        frmData.append("ProductTypeId", values.ProductTypeId);
+        frmData.append("Name", values.Name ? values.Name : item.name);
+        frmData.append("Price", values.Price ? values.Price : item.price);
+        frmData.append("Description", values.Description ? values.Description : item.description);
+        frmData.append("Image", values.Image.file ? values.Image.file : item.Image);
+        frmData.append("ProductTypeId", values.ProductTypeId ? values.ProductTypeId : item.productTypeId);
 
         setConfirmLoading(true);
         setLoading(!loading);
@@ -106,14 +106,14 @@ export default function AddProduct({
               { require: true, message: "vui lòng nhập vào giá sản phẩm" },
             ]}
           >
-            <Input type={"number"} placeholder={item.id ? item.price : ""} />
+            <Input min={"1"} addonAfter={'VNĐ'} type={"number"} placeholder={item.id ? item.price : ""} />
           </Form.Item>
           <Form.Item
             label="Mô Tả"
             name={"Description"}
             rules={[{ require: true, message: "vui lòng nhập vào mô tả" }]}
           >
-            <Input placeholder={item.id ? item.description : ""} />
+            <TextArea rows={6} placeholder={item.id ? item.description : ""} />
           </Form.Item>
           {item.id ? 
             <Image src={`http://localhost:8500/${item.image}`} />

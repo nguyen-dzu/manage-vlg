@@ -34,7 +34,6 @@ export default function EditInfoRes({
     form
       .validateFields()
       .then(async (values) => {
-        console.log(values);
         frmData.append("Name", values.Name ? values.Name : item.name);
         frmData.append("Address", values.Address ? values.Address : item.address);
         frmData.append("IsActive", values.IsActive ? values.IsActive : item.isActive);

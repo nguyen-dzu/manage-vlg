@@ -65,5 +65,11 @@ export default {
   },
   updateProduct: (id, param) => {
     return axiosConfig.put(API_CONFIG.PRODUCT.UPDATE_PRODUCT(id), param)
+  },
+  getDashboardAdmin: () =>{
+    return axiosConfig.get(API_CONFIG.DASHBOARD.GET_DATA_ADMIN)
+  },
+  getDashboardRestaurant: () =>{
+    return axiosConfig.get(API_CONFIG.DASHBOARD.GET_DATA_RESTAURANT)
   }
 };

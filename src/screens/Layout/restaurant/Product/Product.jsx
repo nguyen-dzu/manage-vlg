@@ -1,129 +1,186 @@
 import {
   Button,
-  Col,
   Divider,
   Image,
   Layout,
+  message,
   PageHeader,
-  Row,
-  Spin,
+  Space,
+  Table,
 } from "antd";
+import moment from "moment";
 import React, { useEffect, useState } from "react";
+import Highlighter from "react-highlight-words";
 import apiService from "../../../../api/apiService";
 import MyPagination from "../../../../components/Pagination";
-import { useAppDispatch } from "../../../../hook/useRedux";
-import { actions } from "../../../../redux";
 import errorHandler from "../../../../request/errorHandel";
 import uniqueId from "../../../../utils/uinqueId";
 import SearchName from "../../Search";
-import "./index.scss";
-import ItemProduct from "./ItemProduct";
 import AddProduct from "./Modal";
+import {EditOutlined} from '@ant-design/icons'
+
 export default function Product() {
-  const [listProduct, setListProduct] = useState([]);
+  const [toDoList, setTodoList] = useState([]);
   const [postList, setPostList] = useState({
     pageSize: 10,
     current: 1,
     SearchContent: "",
   });
   const [loading, setLoading] = useState(true);
-  const [addProduct, setAddProduct] = useState(false);
-  const dispatch = useAppDispatch();
   const [pagination, setPagination] = useState({});
-  const [updateProduct, setUpdateProduct] = useState([]);
-
+  const roleId = "c812fa79-de2f-11ec-8bb8-448a5b2c2d80";
+  const [loadingProduct, setLoadingProduct] = useState(false);
+  const [addProduct, setAddProduct] = useState(false);
+  const [editProduct, setEditProduct] = useState([]);
+  const [value, setValue] = useState([]);
   useEffect(() => {
-    const fetchData = async () => {
-      const data = await apiService.getProductRes(postList);
+    const fetchProduct = async () => {
       try {
+        const data = await apiService.getProductRes(postList);
         if (data) {
-          const { pagedData } = data.data;
-          setListProduct(pagedData);
-          dispatch(actions.restaurantActions.setInfo(pagedData));
+          setTodoList(
+            data.data.pagedData.map((item, index) => {
+              return {
+                key: item.id,
+                stt: index + 1,
+                name: item.name,
+                image: item.image,
+                description: item.description,
+                price: item.price,
+                id: item.id,
+                createdAt: moment(item.createdAt).format(
+                  "DDDD-MMMM-YYYY HH:mm"
+                ),
+              };
+            })
+          );
         }
+        setTimeout(() => {
+          setLoading(false);
+        });
         setPagination(data.data.pageInfo);
       } catch (error) {
         errorHandler(error);
       }
-      setTimeout(() => {
-        setLoading(false);
-      });
     };
-    fetchData();
-  }, [postList, addProduct]);
+    fetchProduct();
+  }, [loadingProduct, addProduct, postList]);
+
+  const columns = [
+    {
+      title: "STT",
+      dataIndex: "stt",
+      key: "stt",
+      width: "7%",
+    },
+    {
+      title: "Tên Sản Phẩm",
+      dataIndex: "name",
+      key: "name",
+      render: (name) => (
+        <Highlighter
+          highlightClassName="YourHighlightClass"
+          highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
+          autoEscape={true}
+          searchWords={value}
+          textToHighlight={name}
+        />
+      ),
+    },
+    {
+      title: "Ảnh Sản Phẩm",
+      dataIndex: "image",
+      key: "image",
+      width: '20%',
+      render: (item) => <Image style={{height: 250, width: 250}} src={`http://localhost:8500/${item}`} />,
+    },
+    {
+      title: "Mô Tả",
+      dataIndex: "description",
+      key: "description",
+    },
+
+    {
+      title: "Giả Sản Phẩm",
+      dataIndex: "price",
+      key: "price",
+      render: (item) => {
+        return (
+          <span>
+            {item.toLocaleString("vi", {
+              style: "currency",
+              currency: "VND",
+            })}
+          </span>
+        );
+      },
+    },
+
+    {
+      title: "Hành Động",
+      key: "actions",
+      render: (item) => {
+        return (
+          <Space>
+            <EditOutlined onClick={() => handelEdit(item)} />
+          </Space>
+        );
+      },
+    },
+  ];
+
   const handelEdit = (item) => {
-    setUpdateProduct(item);
+    setEditProduct(item);
     setAddProduct(true);
   };
+  const onSearch = (value) => {
+    setValue([value]);
+    const filteredEvents = toDoList.filter(({ fullName }) => {
+      fullName = fullName.toLowerCase();
+      return fullName.includes(value);
+    });
+    setTodoList(filteredEvents);
+    setPostList({
+      SearchContent: value ? value : "",
+      pageSize: 10,
+      current: pagination.current,
+    });
+    setTimeout(setLoading(true), 3000);
+  };
+  function cancel(e) {
+    message.error("Click on No");
+  }
   return (
-    <Layout key={`${uniqueId()}`}>
-      <PageHeader
-        title="Sản Phẩm Của Bạn"
-        ghost={false}
+    <Layout>
+      <PageHeader title="Quản lý Khách Hàng" ghost={false} />
+      <div
         style={{
-          marginBottom: 10,
+          display: "flex",
+          justifyContent: "space-between",
+          margin: 15,
+          marginBottom: 0,
         }}
-        extra={[
-          <Button onClick={() => setAddProduct(true)} type="success">
-            thêm sản phẩm
-          </Button>,
-        ]}
+      >
+        <SearchName onSearch={onSearch} />
+        <Button
+          type="success"
+          onClick={() => setAddProduct(true)}
+          key={`${uniqueId()}`}
+        >
+          Thêm Khách Hàng
+        </Button>
+      </div>
+      <Table
+        style={{
+          margin: "10px",
+        }}
+        className="table_rows"
+        scroll={{ y: 2000 }}
+        pagination={false}
+        columns={columns}
+        dataSource={toDoList}
+        loading={loading}
       />
-      <Spin spinning={loading}>
-        <Row justify="space-around" gutter={[18, 18]}>
-          {listProduct
-            ? listProduct.map((item, index) => {
-                return (
-                  <>
-                    <Col
-                      span={4}
-                      style={{
-                        margin: 15,
-                        backgroundColor: "#fff",
-                        borderRadius: 20,
-                        paddingLeft: 0,
-                        paddingRight: 0,
-                        boxShadow:
-                          "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px",
-                      }}
-                      key={item.id}
-                    >
-                      <ItemProduct item={item} key={index++} />
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-around",
-                          marginTop: 10,
-                          marginBottom: 5,
-                        }}
-                      >
-                        <Button
-                          style={{
-                            width: 80,
-                            borderRadius: 20,
-                          }}
-                          type="success"
-                          onClick={() => handelEdit(item)}
-                        >
-                          Sửa
-                        </Button>
-                        <Button
-                          style={{
-                            width: 80,
-                            borderRadius: 20,
-                          }}
-                          danger
-                        >
-                          Xóa
-                        </Button>
-                      </div>
-                    </Col>
-                  </>
-                );
-              })
-            : ""}
-        </Row>
-      </Spin>
       {
         <Divider orientation="right" plain>
           <MyPagination
@@ -135,12 +192,12 @@ export default function Product() {
         </Divider>
       }
       <AddProduct
-        item={updateProduct}
-        setItem={setUpdateProduct}
+        item={editProduct}
+        setItem={setEditProduct}
         addProduct={addProduct}
         setAddProduct={setAddProduct}
-        loading={loading}
-        setLoading={setLoading}
+        loadingProduct={loadingProduct}
+        setLoadingProduct={setLoadingProduct}
       />
     </Layout>
   );

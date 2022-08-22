@@ -1,21 +1,14 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis } from "recharts";
+import apiService from "../../api/apiService";
 import "./Chart.scss";
 
 
-const data = [
-  { name: "January", Total: 1200 },
-  { name: "February", Total: 2100 },
-  { name: "March", Total: 800 },
-  { name: "April", Total: 1600 },
-  { name: "May", Total: 900 },
-  { name: "June", Total: 1700 },
-];
 
-export default function Chart({title, aspect}) {
+export default function Chart({aspect, data}) {
   return (
     <div className="chart">
-      <div className="title">{title}</div>
+      <div className="title">Thống Kê 6 Tháng Gần Nhất</div>
       <ResponsiveContainer width="100%" aspect={aspect}>
         <AreaChart
           width={730}

@@ -170,7 +170,6 @@ export default function Restaurant() {
   function confirmStatus(status, id, index) {
     const updateStatus = async () => {
       const data = await apiService.activeRestaurant(id, {isActive: !status});
-      console.log(data)
       if (data.data.isActive == status) {
         notification.error({
           message: status

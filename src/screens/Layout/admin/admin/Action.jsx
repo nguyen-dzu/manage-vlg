@@ -23,21 +23,19 @@ export default function ActionAdmin({
           phoneNumber: values.phoneNumber,
           roleId: "c812fa78-de2f-11ec-8bb8-448a5b2c2d83",
         };
-        console.log(valuesAdmin)
         const data = await apiService.createCustomer(valuesAdmin);
         if (data) {
-          message.success("thêm thành công");
+          message.success("Thêm Thành Công");
         }
 
         setLoadingAdmin(!loadingAdmin);
         setAddAdmin(false);
         form.resetFields();
       })
-      .catch((info) => {
+      .catch(() => {
         message.error(
           "Tạo tài khoản không thành công, có thể email đã tồn tại"
         );
-        console.log(info)
         setLoadingAdmin(false)
         setAddAdmin(false);
       });

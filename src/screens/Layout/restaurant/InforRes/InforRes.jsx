@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "../../../../hook/useRedux";
 import bannerRestaurant from "../../../../assets/img/restaurantnoAvatar.png";
 import apiService from "../../../../api/apiService";
 import "./index.scss";
-import { HddFilled, ProjectFilled } from "@ant-design/icons";
+import { HddFilled, ProjectFilled, CheckCircleFilled } from "@ant-design/icons";
 import EditInfoRes from "./EditInfoRes";
 export default function InforRes() {
   const [profileRes, setProfileRes] = useState([]);
@@ -21,7 +21,7 @@ export default function InforRes() {
       });
     };
     fetchRestaurantProfile();
-  }, [updateRes]);
+  }, [updateRes, loading, profileRes]);
   const handelEdit = (item) => {
     setValueRes(item);
     setUpdateRes(true);
@@ -123,12 +123,14 @@ export default function InforRes() {
               >
                 <h1
                   style={{
-                    fontSize: 20,
+                    fontSize: 23,
                     fontWeight: "bold",
                     color: "#777777",
                   }}
                 >
-                  {profileRes.name}
+                  {profileRes.name} <CheckCircleFilled style={{
+                    color: "#1890ff"
+                  }}/>
                 </h1>
               </div>
               {profileRes.isActive ? (

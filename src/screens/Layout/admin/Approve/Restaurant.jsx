@@ -18,7 +18,7 @@ import {
   LockOutlined,
   UnlockOutlined,
   UserOutlined,
-  ExclamationCircleOutlined
+  ExclamationCircleOutlined,
 } from "@ant-design/icons";
 import moment from "moment";
 import apiService from "../../../../api/apiService";
@@ -33,11 +33,11 @@ export default function ApproveRestaurant() {
   const [postList, setPostList] = useState({
     pageSize: 10,
     current: 1,
-    SearchContent: ''
+    SearchContent: "",
   });
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState({});
-  const [value, setValue] = useState([])
+  const [value, setValue] = useState([]);
   useEffect(() => {
     const fetchUserApproveRestaurant = async () => {
       try {
@@ -72,7 +72,7 @@ export default function ApproveRestaurant() {
       }
     };
     fetchUserApproveRestaurant();
-  }, [postList]);
+  }, [postList, loading]);
 
   const columns = [
     {
@@ -141,7 +141,9 @@ export default function ApproveRestaurant() {
         return (
           <Space size="middle">
             {item.status ? (
-              <Button type="default" disabled={true}>Đã Duyệt</Button>
+              <Button type="default" disabled={true}>
+                Đã Duyệt
+              </Button>
             ) : (
               <Button type="success" onClick={() => handelApprove(item)}>
                 Duyệt
@@ -161,13 +163,11 @@ export default function ApproveRestaurant() {
     });
     setTodoList(filteredEvents);
     setPostList({
-      SearchContent: value ? value :'',
+      SearchContent: value ? value : "",
       pageSize: 10,
       current: pagination.current,
     });
-    setTimeout((
-      setLoading(true)
-    ), 3000)
+    setTimeout(setLoading(true), 3000);
   };
   function handelApprove(items) {
     Modal.confirm({
@@ -175,31 +175,33 @@ export default function ApproveRestaurant() {
       icon: <ExclamationCircleOutlined />,
       content: "Bạn có chắc chắn duyệt quán ăn này không?",
       okText: "đồng ý",
-      cancelText: 'hủy',
+      cancelText: "hủy",
       okType: "danger",
       onOk() {
         const ApproveShipper = async () => {
           const data = await apiService.ApproveRestaurant(items.id);
           if (data) {
             message.success("duyệt thành công thành công");
-            setLoading(!loading);
+            setLoading(true)
+            setTimeout(() => {
+              setLoading(false);
+            }, 3000);
+          }else{
+            message.error('duyệt không thành công')
           }
         };
         ApproveShipper();
       },
       onCancel() {
-        console.log("cancel");
+        message.error("hủy");
       },
     });
   }
 
   return (
     <Layout>
-      <PageHeader
-        title="Duyệt Quán Ăn"
-        ghost={false}
-      />
-       <div
+      <PageHeader title="Duyệt Quán Ăn" ghost={false} />
+      <div
         style={{
           display: "flex",
           justifyContent: "space-between",
@@ -207,10 +209,9 @@ export default function ApproveRestaurant() {
           marginBottom: 0,
         }}
       >
-                <SearchName onSearch={onSearch} />
-
+        <SearchName onSearch={onSearch} />
       </div>
-      
+
       <Table
         style={{
           margin: "10px",

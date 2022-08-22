@@ -122,7 +122,7 @@ export default function ApproveShiper() {
       sorter: (a, b) => a.status - b.status,
     },
   ];
-  function handelApprove(items) {
+  function handelApprove(items, index) {
     Modal.confirm({
       title: "xác nhận",
       icon: <ExclamationCircleOutlined />,
@@ -134,13 +134,16 @@ export default function ApproveShiper() {
           const data = await apiService.ApproveShiper(items.id);
           if (data) {
             message.success("duyệt thành công thành công");
-            setLoading(!loading);
+            setLoading(true);
+            setTimeout(() => {
+              setLoading(false);
+            }, 3000);
           }
         };
         ApproveShipper();
       },
       onCancel() {
-        console.log("cancel");
+        message.error("hủy");
       },
     });
   }
@@ -169,8 +172,7 @@ export default function ApproveShiper() {
           marginBottom: 0,
         }}
       >
-                <SearchName onSearch={onSearch} />
-
+        <SearchName onSearch={onSearch} />
       </div>
       <Table
         style={{
