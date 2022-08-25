@@ -71,5 +71,11 @@ export default {
   },
   getDashboardRestaurant: () =>{
     return axiosConfig.get(API_CONFIG.DASHBOARD.GET_DATA_RESTAURANT)
+  },
+  cancelOrder: (id)=>{
+    return axiosConfig.get(API_CONFIG.RESTAURANT.CANCEL_ORDER(id))
+  },
+  getOrderById: (id) => {
+    return axiosConfig.get(API_CONFIG.RESTAURANT.GET_ORDER_ID(id))
   }
 };

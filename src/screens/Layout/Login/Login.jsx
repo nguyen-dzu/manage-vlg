@@ -28,7 +28,20 @@ function Login() {
     };
     checkToken();
   }, []);
-
+  useEffect(() => {
+    const fetchInfor = async () => {
+      try {
+        const reponse = await authService.getInfo();
+        const { data } = reponse;
+        dispatch(actions.authActions.setInfo(data));
+      } catch (error) {
+        if (error.response.status === 401) {
+          dispatch(actions.authActions.logout());
+        }
+      }
+    };
+    fetchInfor();
+  }, []);
   const layout = {
     labelCol: {
       span: 8

@@ -5,6 +5,7 @@ import {
   Modal,
   notification,
   PageHeader,
+  Popconfirm,
   Table,
 } from "antd";
 import React, { useEffect, useRef, useState } from "react";
@@ -12,12 +13,21 @@ import apiService from "../../../../api/apiService";
 import { useAppDispatch, useAppSelector } from "../../../../hook/useRedux";
 import { actions } from "../../../../redux";
 import errorHandler from "../../../../request/errorHandel";
-import { ExclamationCircleOutlined, SearchOutlined, CheckCircleOutlined, ClockCircleOutlined, IssuesCloseOutlined,CloseCircleOutlined } from "@ant-design/icons";
+import {
+  ExclamationCircleOutlined,
+  SearchOutlined,
+  CheckCircleOutlined,
+  ClockCircleOutlined,
+  IssuesCloseOutlined,
+  CloseCircleOutlined,
+} from "@ant-design/icons";
+import DetailOrder from "./DetailOrder";
 export default function Order() {
   const [toDoList, setTodoList] = useState([]);
   const [loading, setLoading] = useState(true);
   const dispatch = useAppDispatch();
-  const [showOrder, setShowOrder] = useState(false)
+  const [showOrder, setShowOrder] = useState(false);
+  const [listOrder, setListOrder] = useState([]);
   const inforOrder = useAppSelector((state) => state.order.orderData);
   useEffect(() => {
     const timerData2 = setTimeout(() => {
@@ -43,6 +53,7 @@ export default function Order() {
                   shippingFee: item.shippingFee,
                   total: item.total,
                   orderStatus: item.orderStatus,
+                  id: item.id,
                 };
               })
             );
@@ -62,14 +73,16 @@ export default function Order() {
           title: "Đơn Hàng Mới",
           icon: <ExclamationCircleOutlined />,
           content: "Bạn có đơn hàng mới",
-          okText: "Nhận",
           cancelText: "Hủy",
+          okText: "Nhận",
           okType: "success",
+          closable: true,
         });
       }
     }, 1000);
     return () => clearTimeout(timer, timerData2);
   }, [toDoList]);
+
   const columns = [
     {
       title: "STT",
@@ -93,32 +106,6 @@ export default function Order() {
       key: "note",
     },
     {
-      title: "Tổng Đơn Hàng",
-      dataIndex: "total",
-      key: "total",
-      render: (item) => {
-        return item.toLocaleString("vi", {
-          style: "currency",
-          currency: "VND",
-        });
-      },
-    },
-    {
-      title: "Thu Nhập",
-      key: "thushiper",
-      render: (item) => {
-        const result = item.total - item.shippingFee;
-        return (
-          <span>
-            {result.toLocaleString("vi", {
-              style: "currency",
-              currency: "VND",
-            })}
-          </span>
-        );
-      },
-    },
-    {
       title: "Trạng Thái",
       dataIndex: "orderStatus",
       key: "orderStatus",
@@ -126,13 +113,21 @@ export default function Order() {
         return (
           <>
             {item == 0 ? (
-              <Button ghost type="warning" icon={<ClockCircleOutlined />}>Đang chuẩn bị</Button>
+              <Button ghost type="warning" icon={<ClockCircleOutlined />}>
+                Đang chuẩn bị
+              </Button>
             ) : item == 1 ? (
-              <Button ghost type="info" icon={<IssuesCloseOutlined />}>Đang giao</Button>
+              <Button ghost type="info" icon={<IssuesCloseOutlined />}>
+                Đang giao
+              </Button>
             ) : item == 2 ? (
-              <Button ghost type="success" icon={<CheckCircleOutlined />}>Đã Hoàn Thành</Button>
+              <Button ghost type="success" icon={<CheckCircleOutlined />}>
+                Đã Hoàn Thành
+              </Button>
             ) : (
-              <Button ghost type="danger" icon={<CloseCircleOutlined />}>Hủy</Button>
+              <Button ghost type="danger" icon={<CloseCircleOutlined />}>
+                Hủy
+              </Button>
             )}
           </>
         );
@@ -144,14 +139,56 @@ export default function Order() {
       render: (item) => {
         return (
           <>
-            <Button icon={<SearchOutlined />} type="info">
-              Xem Thêm
-            </Button>
+            <div>
+              <Button
+                icon={<SearchOutlined />}
+                type="info"
+                onClick={(setShowOrder(true), setListOrder(item))}
+              >
+                Xem Thêm
+              </Button>
+              {item.orderStatus == 2 ? (
+                ""
+              ) : (
+                <Popconfirm
+                  title="Bạn Xác Nhận Hủy Đơn hàng"
+                  onConfirm={() => handelCancel(item)}
+                  okText="Đồng ý"
+                  cancelText="Hủy"
+                  placement="left"
+                >
+                  <Button
+                    style={{
+                      marginTop: 10,
+                    }}
+                    icon={<CloseCircleOutlined />}
+                    type="danger"
+                  >
+                    Hủy
+                  </Button>
+                </Popconfirm>
+              )}
+            </div>
           </>
         );
       },
     },
   ];
+
+  function handelCancel(item) {
+    const cancelOrder = async () => {
+      const data = await apiService.cancelOrder(item.id);
+      if (data) {
+        setLoading(!loading);
+        notification.success({
+          message: "kích hoạt thành công",
+        });
+      }
+      const tamp = [...toDoList];
+      setTodoList(tamp);
+    };
+    cancelOrder();
+  }
   return (
     <Layout>
       <PageHeader title="Quản Lý Đơn Hàng " ghost={false} />
@@ -178,6 +215,16 @@ export default function Order() {
         dataSource={toDoList}
         loading={loading}
       />
+      {showOrder ? (
+        <DetailOrder
+          item={listOrder}
+          setItem={setListOrder}
+          detailOrder={showOrder}
+          setDetailOrder={setShowOrder}
+        />
+      ) : (
+        ""
+      )}
     </Layout>
   );
 }

@@ -1,20 +1,32 @@
 import React from "react";
-import { UpOutlined,UserOutlined,WalletOutlined ,DollarCircleOutlined,ShoppingCartOutlined} from "@ant-design/icons";
-import './widget.scss';
+import {
+  UpOutlined,
+  UserOutlined,
+  WalletOutlined,
+  DollarCircleOutlined,
+  ShoppingCartOutlined,
+  ShopOutlined,
+  SolutionOutlined,TagsOutlined
+} from "@ant-design/icons";
+import "./widget.scss";
+import { Button } from "antd";
+import { useNavigate } from "react-router";
+import { useAppDispatch } from "../../hook/useRedux";
+import { actions } from "../../redux";
 
-const Widget = ({ type }) => {
+const Widget = ({ title ,type, amount, routerScreen }) => {
   let data;
-
   //temporary
-  const amount = 100;
   const diff = 20;
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   switch (type) {
     case "user":
       data = {
-        title: "USERS",
-        isMoney: false,
-        link: "See all users",
+        title: title,
+        name: "customer",
+        link: "Xem Tất Cả Khách Hàng",
         icon: (
           <UserOutlined
             className="icon"
@@ -26,13 +38,13 @@ const Widget = ({ type }) => {
         ),
       };
       break;
-    case "order":
+    case "restaurant":
       data = {
-        title: "ORDERS",
-        isMoney: false,
-        link: "View all orders",
+        title: title,
+        name: "restaurant",
+        link: "Xem Tất Cả Quán Ăn",
         icon: (
-          <ShoppingCartOutlined
+          <ShopOutlined
             className="icon"
             style={{
               backgroundColor: "rgba(218, 165, 32, 0.2)",
@@ -42,26 +54,13 @@ const Widget = ({ type }) => {
         ),
       };
       break;
-    case "earning":
+    case "shipper":
       data = {
-        title: "EARNINGS",
-        isMoney: true,
-        link: "View net earnings",
+        title: title,
+        name: "Shipper",
+        link: "Xem Tất Cả Shipper",
         icon: (
-          <DollarCircleOutlined
-            className="icon"
-            style={{ backgroundColor: "rgba(0, 128, 0, 0.2)", color: "green" }}
-          />
-        ),
-      };
-      break;
-    case "balance":
-      data = {
-        title: "BALANCE",
-        isMoney: true,
-        link: "See details",
-        icon: (
-          <WalletOutlined
+          <SolutionOutlined
             className="icon"
             style={{
               backgroundColor: "rgba(128, 0, 128, 0.2)",
@@ -71,24 +70,51 @@ const Widget = ({ type }) => {
         ),
       };
       break;
+    case "order":
+      data = {
+        title: title,
+        name: 'order',
+        link: "Xem Tất Cả Đơn Hàng Mới",
+        icon: (
+          <ShoppingCartOutlined
+            className="icon"
+            style={{ backgroundColor: "rgba(0, 128, 0, 0.2)", color: "green" }}
+          />
+        ),
+      };
+      break;
+
     default:
       break;
   }
-
+  function handelRoute(params) {
+    navigate(params);
+    dispatch(actions.formActions.setNameMenu(title));
+  }
   return (
     <div className="widget">
-      <div className="left">
+      <div style={{
+        width: '70%'
+      }} className="left">
         <span className="title">{data.title}</span>
         <span className="counter">
-          {data.isMoney && "$"} {amount}
+         <TagsOutlined style={{fontSize: 20, marginRight: 10}} />{amount}
         </span>
-        <span className="link">{data.link}</span>
+        <Button className="link" ghost type="dashed" style={{
+          borderColor: '#C02424'
+        }} onClick={() => handelRoute(routerScreen)}>
+          <span style={{color: '#C02424'}}>{data.link}</span>
+        </Button>
       </div>
       <div className="right">
-        <div className="percentage positive">
-          <UpOutlined />
-          {diff} %
-        </div>
+        {data.name == "order" ? (
+          <div className="percentage positive">
+            <UpOutlined />
+            {diff} %
+          </div>
+        ) : (
+          ""
+        )}
         {data.icon}
       </div>
     </div>

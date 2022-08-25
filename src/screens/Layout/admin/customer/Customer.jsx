@@ -139,7 +139,7 @@ export default function Customer() {
                 !status ? "Kích hoạt người dùng này ?" : "Khóa người dùng này ?"
               }
               onConfirm={() => confirmStatus(status, item.id, item.stt)}
-              onCancel={cancel}
+              onCancel={() => cancel}
               okText="Đồng ý"
               cancelText="Hủy"
               placement="left"

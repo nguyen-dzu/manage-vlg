@@ -1,19 +1,31 @@
-import { Layout, Modal } from "antd";
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import apiService from "../../../../api/apiService";
-
+import {
+  Button,
+  Col,
+  Form,
+  Grid,
+  Image,
+  Input,
+  message,
+  Modal,
+  Radio,
+  Row,
+  Upload,
+} from "antd";
 export default function DetailOrder({
   item,
   setItem,
   detailOrder,
-  setDetailOrider,
+  setDetailOrder,
 }) {
   const [inforOrder, setInforOrder] = useState([]);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     const fetchInfoOrder = async () => {
-      const data = await apiService.getOrder(item.id);
+      const data = await apiService.getOrderById(item.id);
+      setInforOrder(data.data);
     };
     setTimeout(() => {
       setLoading(!loading);
@@ -23,7 +35,7 @@ export default function DetailOrder({
   }, [loading]);
 
   function handelOk() {
-    setDetailOrider(false);
+    setDetailOrder(false);
     setItem("");
   }
   return (
@@ -33,6 +45,25 @@ export default function DetailOrder({
       visible={detailOrder}
       onOk={handelOk}
       onCancel={handelOk}
-    ></Modal>
+    >
+      {inforOrder ? (
+        <>
+          <Row>
+            <Col span={8}>
+                <h1>Thông Tin Đơn Hàng</h1>
+
+            </Col>
+            <Col span={8}>
+
+            </Col>
+            <Col span={8}>
+
+            </Col>
+          </Row>
+        </>
+      ) : (
+        ""
+      )}
+    </Modal>
   );
 }

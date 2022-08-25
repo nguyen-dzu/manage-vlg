@@ -238,7 +238,7 @@ export default function Restaurant() {
           }}
           key={`${uniqueId()}`}
         >
-          Duyệt Shipper
+          Duyệt Quán Ăn
         </Button>
       </div>
       <Table

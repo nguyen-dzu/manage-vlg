@@ -14,28 +14,22 @@ export default function HomePage() {
   const [valueRevenue, setValueRevenue] = useState({});
   const [loading, setLoading] = useState(true);
   const {role} = useAppSelector(state => state.auth.info)
+
   useEffect(() => {
     const fetchValueChart = async () => {
       const data = await apiService.getDashboardAdmin();
-      setValueChart(data.data);
+      setValueChart(data.data.revenue);
       setValueWidget(data.data);
       setValueRevenue(data.data);
     };
+    setLoading(true)
     if(role.id == 'c812fa78-de2f-11ec-8bb8-448a5b2c2d83'){
       fetchValueChart();
       setLoading(false);
     }else{
       setLoading(false);
     }
-  }, [valueRevenue, valueWidget, valueChart]);
-  const dataChart = [
-    { name: "January", Total: 1200 },
-    { name: "February", Total: 2100 },
-    { name: "March", Total: 800 },
-    { name: "April", Total: 1600 },
-    { name: "May", Total: 900 },
-    { name: "June", Total: 1700 },
-  ];
+  }, []);
   const DataSource = [
     {
       id: "1",
@@ -106,10 +100,9 @@ export default function HomePage() {
       <Spin spinning={loading}>
         <div className="homeContainer">
           <div className="homeWidget">
-            <Widget type="user" />
-            <Widget type="order" />
-            <Widget type="earning" />
-            <Widget type="balance" />
+            <Widget routerScreen={'/customer'} title={'Khách Hàng'} type="user" amount={valueWidget.user} />
+            <Widget routerScreen={'/restaurant'} title={'Quán Ăn'} type="restaurant" amount={valueWidget.restaurant} />
+            <Widget routerScreen={'/shipper'} title={'Shipper'} type="shipper" amount={valueWidget.shipper} />
           </div>
           <div className="charts">
             <Featured
@@ -122,7 +115,7 @@ export default function HomePage() {
                   : valueRevenue.totalRevenue
               }
             />
-            <Chart aspect={2 / 1} data={dataChart} />
+            <Chart aspect={2 / 1} data={valueChart} />
           </div>
           <div>
             <h1>Đơn Hàng Mới</h1>

@@ -37,14 +37,12 @@ export default function AddProduct({
     form
       .validateFields()
       .then(async (values) => {
+        setConfirmLoading(true);
         frmData.append("Name", values.Name ? values.Name : item.name);
         frmData.append("Price", values.Price ? values.Price : item.price);
         frmData.append("Description", values.Description ? values.Description : item.description);
         frmData.append("Image", values.Image.file ? values.Image.file : item.Image);
         frmData.append("ProductTypeId", values.ProductTypeId ? values.ProductTypeId : item.productTypeId);
-
-        setConfirmLoading(true);
-        setLoading(!loading);
         if (item.id) {
           const data = await apiService.updateProduct(item.id, frmData);
           if (data) {
@@ -56,7 +54,7 @@ export default function AddProduct({
             message.success("thêm thành công");
           }
         }
-
+        setConfirmLoading(false)
         setAddProduct(false);
         form.resetFields();
       })

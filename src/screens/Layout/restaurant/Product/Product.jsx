@@ -101,7 +101,7 @@ export default function Product() {
     },
 
     {
-      title: "Giả Sản Phẩm",
+      title: "Giá Sản Phẩm",
       dataIndex: "price",
       key: "price",
       render: (item) => {
@@ -145,14 +145,16 @@ export default function Product() {
       pageSize: 10,
       current: pagination.current,
     });
-    setTimeout(setLoading(true), 3000);
+    setTimeout(() => {
+      setLoading(true)
+    }, 3000);
   };
   function cancel(e) {
     message.error("Click on No");
   }
   return (
     <Layout>
-      <PageHeader title="Quản lý Khách Hàng" ghost={false} />
+      <PageHeader title="Quản lý Menu Quán" ghost={false} />
       <div
         style={{
           display: "flex",
@@ -167,7 +169,7 @@ export default function Product() {
           onClick={() => setAddProduct(true)}
           key={`${uniqueId()}`}
         >
-          Thêm Khách Hàng
+          Thêm Menu Quán
         </Button>
       </div>
       <Table

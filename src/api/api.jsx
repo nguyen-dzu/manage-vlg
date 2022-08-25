@@ -25,7 +25,9 @@ export const API_CONFIG = {
     _CREATE_PRODUCT: `/Products`,
     ACTIVE_RES: (id) => `/Restaurants/${id}/Active`,
     GET_ORDER: '/Orders/Restaurant',
-    GET_RESTAURANTPROFILE: '/Restaurants/RestaurantProfile'
+    GET_ORDER_ID:(id) => `/Orders?orderId=${id}`,
+    GET_RESTAURANTPROFILE: '/Restaurants/RestaurantProfile',
+    CANCEL_ORDER: (id) => `/Orders/${id}/CancelOrder`
   },
   SHIPPER : {
     GET_SHIPPER:(postList, roleId) =>  `/Users?RoleId=${roleId}&PageSize=${postList.pageSize}&Current=${postList.current}&SearchContent=${postList.SearchContent}`,

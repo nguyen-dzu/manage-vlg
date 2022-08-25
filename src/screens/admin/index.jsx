@@ -26,8 +26,6 @@ import "./index.scss";
 import { useAppDispatch, useAppSelector } from "../../hook/useRedux";
 import { actions } from "../../redux";
 import authService from "../../api/authService";
-import Roles from "../Layout/admin/Roles";
-import Login from "../Layout/Login/Login";
 const { SubMenu } = Menu;
 // export default function SiderDemo({ items }) {
 //   return(<div>a</div>)
@@ -41,8 +39,8 @@ export default function SiderDemo({ items, headerItem = null }) {
   const dispatch = useAppDispatch();
   const { Header, Sider, Content } = Layout;
   const [collapsed, setCollapsed] = useState(false);
-  const [role, setRole] = useState();
   const [theme, setTheme] = useState("dark");
+  const {role} = useAppSelector(state => state.auth.info)
   const toggle = () => {
     setCollapsed(!collapsed);
   };
@@ -51,7 +49,6 @@ export default function SiderDemo({ items, headerItem = null }) {
       try {
         const reponse = await authService.getInfo();
         const { data } = reponse;
-        setRole(data.roleId);
         dispatch(actions.authActions.setInfo(data));
       } catch (error) {
         if (error.response.status === 401) {
@@ -92,7 +89,7 @@ export default function SiderDemo({ items, headerItem = null }) {
           >
             Trang Chủ
           </Menu.Item>
-          {role == "c812fa78-de2f-11ec-8bb8-448a5b2c2d83" ? (
+          {role.id == "c812fa78-de2f-11ec-8bb8-448a5b2c2d83" ? (
             <>
               <SubMenu
                 key={"NGUOIDUNG"}
@@ -173,7 +170,7 @@ export default function SiderDemo({ items, headerItem = null }) {
                 </Menu.Item>
               </SubMenu>
             </>
-          ) : role == "c812fa79-de2f-11ec-8bb8-448a5b3c2d80" ? (
+          ) : role.id == "c812fa79-de2f-11ec-8bb8-448a5b3c2d80" ? (
             <>
               {" "}
               <Menu.Item
@@ -207,8 +204,8 @@ export default function SiderDemo({ items, headerItem = null }) {
                 Đơn Hàng Mới
               </Menu.Item>
             </>
-          ) : role == "c812fa79-de2f-11ec-8bb8-448a5b2c2d80" ||
-            role == "c812fa78-de2f-11ec-8bb8-448a5b2c2d80" ? (
+          ) : role.id == "c812fa79-de2f-11ec-8bb8-448a5b2c2d80" ||
+            role.id == "c812fa78-de2f-11ec-8bb8-448a5b2c2d80" ? (
             ((dispatch(actions.authActions.logout()), localStorage.clear()),
             message.error("Bạn Không Có Quyền Đăng Nhập"))
           ) : (
