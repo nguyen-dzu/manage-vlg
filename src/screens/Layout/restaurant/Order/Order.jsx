@@ -143,7 +143,7 @@ export default function Order() {
               <Button
                 icon={<SearchOutlined />}
                 type="info"
-                onClick={(setShowOrder(true), setListOrder(item))}
+                onClick={() => handelShow(item)}
               >
                 Xem Thêm
               </Button>
@@ -181,13 +181,18 @@ export default function Order() {
       if (data) {
         setLoading(!loading);
         notification.success({
-          message: "kích hoạt thành công",
+          message: "hủy đơn thành công",
         });
       }
       const tamp = [...toDoList];
       setTodoList(tamp);
     };
     cancelOrder();
+  }
+
+  const handelShow = (item) => {
+    setShowOrder(true);
+    setListOrder(item)
   }
   return (
     <Layout>

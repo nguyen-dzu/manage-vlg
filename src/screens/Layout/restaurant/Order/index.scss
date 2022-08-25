@@ -1,4 +1,19 @@
+.modal_ {
+  width: 90% !important;
+}
 
-.Model_{
-    width: 70% !important; 
+.containerTitle {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+  .title_info {
+    font-size: 16px;
+    font-weight: bold;
+    margin-right: 5px;
+  }
+  .contentInfo{
+    .Content{
+        width: 250px;
+    }
+  }
 }

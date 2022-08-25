@@ -126,12 +126,12 @@ function Login() {
               </Form.Item>
 
               <Form.Item
-                label="Password"
+                label="Mật Khẩu"
                 name="password"
                 rules={[
                   {
                     required: true,
-                    message: "Please input your password!"
+                    message: "Please input your Mật Khẩu!"
                   }
                 ]}
               >

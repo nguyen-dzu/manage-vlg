@@ -105,7 +105,7 @@ export default function ActionCustomer({
             rules={[
               {
                 required: true,
-                message: "vui lòng nhập vào password",
+                message: "vui lòng nhập vào mật khẩu",
               },
             ]}
           >

@@ -97,12 +97,12 @@ export default function ActionAdmin({
             <Input type="email" autoComplete="off" />
           </Form.Item>
           <Form.Item
-            label="password"
+            label="Mật Khẩu"
             name="password"
             rules={[
               {
                 required: true,
-                message: "vui lòng nhập vào password",
+                message: "vui lòng nhập vào Mật Khẩu",
               },
             ]}
           >
