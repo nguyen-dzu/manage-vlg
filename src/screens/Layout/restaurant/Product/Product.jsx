@@ -91,7 +91,7 @@ export default function Product() {
       title: "Ảnh Sản Phẩm",
       dataIndex: "image",
       key: "image",
-      width: '20%',
+      width: '25%',
       render: (item) => <Image style={{height: 250, width: 250}} src={`http://localhost:8500/${item}`} />,
     },
     {
