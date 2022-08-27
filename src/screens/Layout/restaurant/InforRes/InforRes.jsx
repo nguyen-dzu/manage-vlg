@@ -21,7 +21,7 @@ export default function InforRes() {
       });
     };
     fetchRestaurantProfile();
-  }, [updateRes, loading, profileRes]);
+  }, [updateRes, loading]);
   const handelEdit = (item) => {
     setValueRes(item);
     setUpdateRes(true);

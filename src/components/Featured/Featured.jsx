@@ -13,7 +13,7 @@ export default function Featured({totalRevenue}) {
       </div>
       <div className="bottom">
         <div className="featuredChart">
-          <CircularProgressbar value={70} text={"70%"} strokeWidth={5} />
+          <CircularProgressbar value={100} text={"100%"} strokeWidth={5} />
         </div>
         <p className="title">Tổng tất cả doanh thu đạt được</p>
         <p className="amount">{totalRevenue}</p>

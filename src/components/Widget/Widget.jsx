@@ -6,7 +6,10 @@ import {
   DollarCircleOutlined,
   ShoppingCartOutlined,
   ShopOutlined,
-  SolutionOutlined,TagsOutlined
+  SolutionOutlined,
+  TagsOutlined,
+  PicCenterOutlined,
+  StockOutlined
 } from "@ant-design/icons";
 import "./widget.scss";
 import { Button } from "antd";
@@ -14,7 +17,7 @@ import { useNavigate } from "react-router";
 import { useAppDispatch } from "../../hook/useRedux";
 import { actions } from "../../redux";
 
-const Widget = ({ title ,type, amount, routerScreen }) => {
+const Widget = ({ title, type, amount, routerScreen }) => {
   let data;
   //temporary
   const diff = 20;
@@ -73,7 +76,7 @@ const Widget = ({ title ,type, amount, routerScreen }) => {
     case "order":
       data = {
         title: title,
-        name: 'order',
+        name: "order",
         link: "Xem Tất Cả Đơn Hàng Mới",
         icon: (
           <ShoppingCartOutlined
@@ -83,7 +86,37 @@ const Widget = ({ title ,type, amount, routerScreen }) => {
         ),
       };
       break;
-
+    case "product":
+      data = {
+        title: title,
+        name: "product",
+        link: "Xem Sản Phẩm",
+        icon: (
+          <PicCenterOutlined 
+            className="icon"
+            style={{
+              backgroundColor: "rgba(128, 0, 128, 0.2)",
+              color: "purple",
+            }}
+          />
+        ),
+      };
+      break;
+    case "totalRevenue":
+      data = {
+        title: title,
+        name: "totalRevenue",
+        icon: (
+          <StockOutlined 
+            className="icon"
+            style={{
+              backgroundColor: "rgba(255, 0, 0, 0.2)",
+              color: "purple",
+            }}
+          />
+        ),
+      };
+      break;
     default:
       break;
   }
@@ -93,18 +126,32 @@ const Widget = ({ title ,type, amount, routerScreen }) => {
   }
   return (
     <div className="widget">
-      <div style={{
-        width: '70%'
-      }} className="left">
+      <div
+        style={{
+          width: "70%",
+        }}
+        className="left"
+      >
         <span className="title">{data.title}</span>
         <span className="counter">
-         <TagsOutlined style={{fontSize: 20, marginRight: 10}} />{amount}
+          <TagsOutlined style={{ fontSize: 20, marginRight: 10 }} />
+          {amount}
         </span>
-        <Button className="link" ghost type="dashed" style={{
-          borderColor: '#C02424'
-        }} onClick={() => handelRoute(routerScreen)}>
-          <span style={{color: '#C02424'}}>{data.link}</span>
-        </Button>
+        {type != "totalRevenue" ? (
+          <Button
+            className="link"
+            ghost
+            type="dashed"
+            style={{
+              borderColor: "#C02424",
+            }}
+            onClick={() => handelRoute(routerScreen)}
+          >
+            <span style={{ color: "#C02424" }}>{data.link}</span>
+          </Button>
+        ) : (
+          ""
+        )}
       </div>
       <div className="right">
         {data.name == "order" ? (

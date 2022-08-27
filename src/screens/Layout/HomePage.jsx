@@ -13,115 +13,122 @@ export default function HomePage() {
   const [valueWidget, setValueWidget] = useState([]);
   const [valueRevenue, setValueRevenue] = useState({});
   const [loading, setLoading] = useState(true);
-  const {role} = useAppSelector(state => state.auth.info)
+  const { role } = useAppSelector((state) => state.auth.info);
 
+  const [valueChartRes, setValueChartRes] = useState([]);
+  const [valueWidgetRes, setValueWidgetRes] = useState([]);
+  const [valueRevenueRes, setValueRevenueRes] = useState({});
   useEffect(() => {
-    const fetchValueChart = async () => {
-      const data = await apiService.getDashboardAdmin();
-      setValueChart(data.data.revenue);
-      setValueWidget(data.data);
-      setValueRevenue(data.data);
+    const fetchDarhBoardAdmid = async () => {
+      const reponse = await apiService.getDashboardAdmin();
+      setValueChart(reponse.data.revenue);
+      setValueWidget(reponse.data);
+      setValueRevenue(reponse.data);
+      setLoading(true);
+      console.log(reponse)
+      if(reponse){
+        setLoading(false)
+      }
     };
-    setLoading(true)
-    if(role.id == 'c812fa78-de2f-11ec-8bb8-448a5b2c2d83'){
-      fetchValueChart();
+    const fetchDarhBoardRes = async () => {
+      const data = await apiService.getDashboardRestaurant();
+      setValueChartRes(data.data.revenue);
+      setValueWidgetRes(data.data);
+      setValueRevenueRes(data.data);
+      setLoading(true);
+      if (data) {
+        setLoading(false);
+      }
+    };
+    setLoading(true);
+    if (role.id == "c812fa78-de2f-11ec-8bb8-448a5b2c2d83") {
+      fetchDarhBoardAdmid();
       setLoading(false);
-    }else{
+    } else {
+      fetchDarhBoardRes();
       setLoading(false);
     }
   }, []);
-  const DataSource = [
-    {
-      id: "1",
-      MSSV: "197PM31229",
-      name: "Nguyễn Hoàng Vũ",
-      age: "21",
-      address: "TP HCM",
-    },
-    {
-      id: "2",
-      MSSV: "197PM31229",
-      name: "Nguyễn Hoàng Vũ",
-      age: "21",
-      address: "TP HCM",
-    },
-    {
-      id: "3",
-      MSSV: "197PM31229",
-      name: "Nguyễn Hoàng Vũ",
-      age: "21",
-      address: "TP HCM",
-    },
-    {
-      id: "4",
-      MSSV: "197PM31229",
-      name: "Nguyễn Hoàng Vũ",
-      age: "21",
-      address: "TP HCM",
-    },
-    {
-      id: "5",
-      MSSV: "197PM31229",
-      name: "Nguyễn Hoàng Vũ",
-      age: "21",
-      address: "TP HCM",
-    },
-  ];
-  const Column = [
-    {
-      title: "STT",
-      dataIndex: "id",
-      key: "id",
-      width: "6%",
-    },
-    {
-      title: "Mã Số Sinh Viên",
-      dataIndex: "MSSV",
-      key: "MSSV",
-    },
-    {
-      title: "Họ Và Tên",
-      dataIndex: "name",
-      key: "name",
-    },
-    {
-      title: "Tuổi",
-      dataIndex: "age",
-      key: "age",
-    },
-    {
-      title: "Địa Chỉ",
-      dataIndex: "address",
-      key: "address",
-    },
-  ];
+
   return (
     <Layout>
       <Spin spinning={loading}>
-        <div className="homeContainer">
-          <div className="homeWidget">
-            <Widget routerScreen={'/customer'} title={'Khách Hàng'} type="user" amount={valueWidget.user} />
-            <Widget routerScreen={'/restaurant'} title={'Quán Ăn'} type="restaurant" amount={valueWidget.restaurant} />
-            <Widget routerScreen={'/shipper'} title={'Shipper'} type="shipper" amount={valueWidget.shipper} />
+        {role.id == "c812fa78-de2f-11ec-8bb8-448a5b2c2d83" ? (
+          <div className="homeContainer">
+            <div className="homeWidget">
+              <Widget
+                routerScreen={"/customer"}
+                title={"Khách Hàng"}
+                type="user"
+                amount={valueWidget.user}
+              />
+              <Widget
+                routerScreen={"/restaurant"}
+                title={"Quán Ăn"}
+                type="restaurant"
+                amount={valueWidget.restaurant}
+              />
+              <Widget
+                routerScreen={"/shipper"}
+                title={"Shipper"}
+                type="shipper"
+                amount={valueWidget.shipper}
+              />
+            </div>
+            <div className="charts">
+              <Featured
+                totalRevenue={
+                  valueRevenue.totalRevenue
+                    ? valueRevenue.totalRevenue.toLocaleString("vi", {
+                        style: "currency",
+                        currency: "VND",
+                      })
+                    : valueRevenue.totalRevenue
+                }
+              />
+              <Chart aspect={2 / 1} data={valueChart} />
+            </div>
           </div>
-          <div className="charts">
-            <Featured
-              totalRevenue={
-                valueRevenue.totalRevenue
-                  ? valueRevenue.totalRevenue.toLocaleString("vi", {
-                      style: "currency",
-                      currency: "VND",
-                    })
-                  : valueRevenue.totalRevenue
-              }
-            />
-            <Chart aspect={2 / 1} data={valueChart} />
+        ) : (
+          <div className="homeContainer">
+            <div className="homeWidget">
+              <Widget
+                routerScreen={"/restaurantProduct"}
+                title={"Sản Phẩm"}
+                type="user"
+                amount={valueWidgetRes.product}
+              />
+              <Widget
+                routerScreen={"/"}
+                title={"Tổng Thu 6 tháng"}
+                type="totalRevenue"
+                amount={valueWidgetRes.totalRevenue?.toLocaleString("vi", {
+                  style: "currency",
+                  currency: "VND",
+                })}
+              />
+              <Widget
+                routerScreen={"/order"}
+                title={"Đơn Hàng"}
+                type="order"
+                amount={valueWidgetRes.order}
+              />
+            </div>
+            <div className="charts">
+              <Featured
+                totalRevenue={
+                  valueWidgetRes.totalRevenue
+                    ? valueWidgetRes.totalRevenue.toLocaleString("vi", {
+                        style: "currency",
+                        currency: "VND",
+                      })
+                    : valueWidgetRes.totalRevenue
+                }
+              />
+              <Chart aspect={2 / 1} data={valueChartRes} />
+            </div>
           </div>
-          <div>
-            <h1>Đơn Hàng Mới</h1>
-            <Table dataSource={DataSource} columns={Column} />
-          </div>
-        </div>
+        )}
       </Spin>
     </Layout>
   );

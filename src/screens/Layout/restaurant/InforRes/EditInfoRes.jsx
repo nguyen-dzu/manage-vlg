@@ -27,21 +27,31 @@ export default function EditInfoRes({
 }) {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  const [listInfo, setListInfo] = useState([]);
   const frmData = new FormData();
-
+  const [active, setActive] = useState(true)
   const handelOk = () => {
     form
       .validateFields()
       .then(async (values) => {
-        frmData.append("Name", values.Name ? values.Name : item.name);
-        frmData.append("Address", values.Address ? values.Address : item.address);
-        frmData.append("IsActive", values.IsActive ? values.IsActive : item.isActive);
-        frmData.append("banner", values.Banner ? values.Banner : `http://localhost:8500/${item.banner}`);
         setLoading(true);
+        frmData.append("Name", values.Name ? values.Name : item.name);
+        frmData.append(
+          "Address",
+          values.Address ? values.Address : item.address
+        );
+        frmData.append(
+          "IsActive",
+          active
+        );
+        frmData.append(
+          "banner",
+          values.Banner
+            ? values.Banner.file
+            : `http://localhost:8500/${item.banner}`
+        );
         const data = await apiService.updateRestaurant(item.id, frmData);
         if (data) {
-          setLoading(!loading);
+          setLoading(false);
           message.success("sửa thành công");
         }
         setUpdateInfoRess(false);
@@ -84,7 +94,7 @@ export default function EditInfoRes({
         layout="vertical"
         initialValues={{
           midifier: "public",
-          isActive: true,
+          IsActive: true,
         }}
         autoComplete="off"
       >
@@ -94,10 +104,16 @@ export default function EditInfoRes({
         <Form.Item label="Địa Chỉ Cửa Hàng" name="Address">
           <Input placeholder={item.id ? item.address : ""} />
         </Form.Item>
-        <Form.Item label="Trạng Thái Cửa Hàng" name="IsActive">
-          <Radio.Group defaultValue={true}>
-            <Radio value={true}>Đang Hoạt Động</Radio>
-            <Radio value={false}>Không Hoạt Động</Radio>
+        <Form.Item
+          label="Trạng Thái Cửa Hàng"
+          name="IsActive"
+          valuePropName="checked"
+        >
+          <Radio.Group defaultValue={true} buttonStyle="solid" onChange={(e) => setActive(e.target.value)}>
+            <Radio.Button value={true} style={{
+              marginRight: 10
+            }}>Đang Hoạt Động</Radio.Button>
+            <Radio.Button value={false}>Ngưng Hoạt Động</Radio.Button>
           </Radio.Group>
         </Form.Item>
         <Image src={`http://localhost:8500/${item.banner}`} />

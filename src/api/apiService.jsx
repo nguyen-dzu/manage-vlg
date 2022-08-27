@@ -77,5 +77,8 @@ export default {
   },
   getOrderById: (id) => {
     return axiosConfig.get(API_CONFIG.RESTAURANT.GET_ORDER_ID(id))
-  }
+  },
+  getOrder_5: ()=>{
+    return axiosConfig.get(API_CONFIG.RESTAURANT.GET_ORDER);
+  },
 };

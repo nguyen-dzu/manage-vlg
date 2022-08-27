@@ -22,6 +22,7 @@ import {
   Input,
   message,
   Modal,
+  notification,
   Radio,
   Row,
   Spin,
@@ -53,21 +54,6 @@ export default function DetailOrder({
     }, 3000);
   }, []);
 
-  function handelCancel(item) {
-    const cancelOrder = async () => {
-      const data = await apiService.cancelOrder(item.id);
-      if (data) {
-        setLoading(!loading);
-        setItem('')
-        setDetailOrder(false)
-        notification.success({
-          message: "Hủy đơn thành công",
-        });
-      }
-    };
-    cancelOrder();
-  }
-
   function handelok() {
     setDetailOrder(false);
     setItem("");
@@ -78,7 +64,7 @@ export default function DetailOrder({
       title={"Thông Tin Chi Tiết Đơn Hàng"}
       visible={detailOrder}
       onOk={handelok}
-      onCancel={handelCancel(item)}
+      onCancel={handelok}
       okText="Nhận"
       cancelText="Hủy"
     >
